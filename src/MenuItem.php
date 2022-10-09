@@ -16,14 +16,14 @@ class MenuItem
         public \Closure|bool $resolver = true,
         public bool $isActive = false,
     )
-    {
-        if ($type == MenuType::Route) {
-            $this->isActive = $this->activeRoute($this->name, $this->param);
-        }
-    }
+    { }
 
     public function resolve(): bool
     {
+        if ($this->type == MenuType::Route) {
+            $this->isActive = $this->activeRoute($this->name, $this->param);
+        }
+
         if($this->resolver instanceof \Closure) {
             return (bool) $this->resolver->call($this);
         }
