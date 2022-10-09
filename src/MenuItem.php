@@ -2,6 +2,7 @@
 
 namespace Koffin\Menu;
 
+use Exception;
 use Koffin\Menu\Enum\MenuType;
 
 class MenuItem
@@ -14,20 +15,24 @@ class MenuItem
         public array $param = [],
         public string $group = 'Default',
         public \Closure|bool $resolver = true,
-        public bool $isActive = false,
     )
     { }
 
     public function resolve(): bool
     {
-        if ($this->type == MenuType::Route) {
-            $this->isActive = $this->activeRoute($this->name, $this->param);
-        }
-
         if($this->resolver instanceof \Closure) {
             return (bool) $this->resolver->call($this);
         }
         return $this->resolver;
+    }
+
+    public function isActive(): bool
+    {
+        if ($this->type == MenuType::Route) {
+            return $this->activeRoute($this->name, $this->param);
+        }
+
+        return false;
     }
 
     private function activeRoute(string $route = '', array $params = []): bool
@@ -36,28 +41,34 @@ class MenuItem
             return false;
         }
 
-        if (request()->routeIs("{$route}*")) {
-            if (empty($params)) {
+        try {
+            if (request()->routeIs("{$route}*")) {
+                if (empty($params)) {
+                    return true;
+                }
+
+                $requestRoute = request()->route();
+                $paramNames = $requestRoute->parameterNames();
+
+                foreach ($params as $key => $value) {
+                    if (is_int($key)) {
+                        $key = $paramNames[$key];
+                    }
+                    if (
+                        $requestRoute->parameter($key) instanceof \Illuminate\Database\Eloquent\Model
+                        && $value instanceof \Illuminate\Database\Eloquent\Model
+                        && $requestRoute->parameter($key)->id != $value->id
+                    ) {
+                        return false;
+                    }
+                    if ($requestRoute->parameter($key) != $value) {
+                        return false;
+                    }
+                }
+
                 return true;
             }
-
-            $requestRoute = request()->route();
-
-            foreach ($params as $key => $value) {
-                if (
-                    $requestRoute->parameter($key) instanceof \Illuminate\Database\Eloquent\Model
-                    && $value instanceof \Illuminate\Database\Eloquent\Model
-                    && $requestRoute->parameter($key)->id != $value->id
-                ) {
-                    return false;
-                }
-                if ($requestRoute->parameter($key) != $value) {
-                    return false;
-                }
-            }
-
-            return true;
-        }
+        } catch (Exception $e) {}
 
         return false;
     }
