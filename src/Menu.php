@@ -24,7 +24,13 @@ class Menu
 
     public function get(): Collection
     {
-        return collect(static::$factory[static::$menu])->groupBy('group');
+        try {
+            if (static::$factory[static::$menu]) {
+                return collect(static::$factory[static::$menu])->groupBy('group');
+            }
+        } catch (Exception $e) {}
+
+        return collect();
     }
 
     public static function route(string $name, string $title, array $attribute = [], array $param = [], Closure|bool $resolver = true): static
