@@ -29,12 +29,12 @@ class Menu
 
     public static function route(string $name, string $title, array $attribute = [], array $param = [], Closure|bool $resolver = true): static
     {
-        return static::add(type: MenuType::Route, name: $name, title: $title, param: $param, resolver: $resolver);
+        return static::add(type: MenuType::Route, name: $name, title: $title, attribute: $attribute, param: $param, resolver: $resolver);
     }
 
     public static function url(string $name, string $title, array $attribute = [], array $param = [], Closure|bool $resolver = true): static
     {
-        return static::add(type: MenuType::URL, name: $name, title: $title, param: $param, resolver: $resolver);
+        return static::add(type: MenuType::URL, name: $name, title: $title, attribute: $attribute, param: $param, resolver: $resolver);
     }
 
     public static function add(MenuType $type, string $name, string $title, array $attribute = [], array $param = [], Closure|bool $resolver = true): static
