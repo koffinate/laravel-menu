@@ -3,6 +3,7 @@
 namespace Koffin\Menu;
 
 use Closure;
+use Exception;
 use Illuminate\Support\Collection;
 use Koffin\Menu\Enum\MenuType;
 
