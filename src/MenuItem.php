@@ -42,7 +42,7 @@ class MenuItem
         }
 
         try {
-            if (request()->routeIs("{$route}*")) {
+            if (request()->routeIs($route, "{$route}.*")) {
                 if (empty($params)) {
                     return true;
                 }
@@ -54,6 +54,7 @@ class MenuItem
                     if (is_int($key)) {
                         $key = $paramNames[$key];
                     }
+
                     if (
                         $requestRoute->parameter($key) instanceof \Illuminate\Database\Eloquent\Model
                         && $value instanceof \Illuminate\Database\Eloquent\Model
@@ -61,8 +62,20 @@ class MenuItem
                     ) {
                         return false;
                     }
-                    if ($requestRoute->parameter($key) != $value) {
-                        return false;
+
+                    if (is_object($requestRoute->parameter($key))) {
+                        // try to check param is enum type
+                        try {
+                            if ($requestRoute->parameter($key)->value && $requestRoute->parameter($key)->value != $value) {
+                                return false;
+                            }
+                        } catch (Exception $e) {
+                            return false;
+                        }
+                    } else {
+                        if ($requestRoute->parameter($key) != $value) {
+                            return false;
+                        }
                     }
                 }
 
