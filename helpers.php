@@ -22,13 +22,13 @@ if (!function_exists('menuType')) {
     /**
      * Menu Type Enum
      *
-     * @return ?MenuType
+     * @return MenuType|string|null
      */
-    function menuType(?string $type = null): ?MenuType
+    function menuType(?string $type = null): MenuType|string|null
     {
         if ($type) {
             MenuType::tryFrom($type);
         }
-        return new MenuType;
+        return MenuType::class;
     }
 }
