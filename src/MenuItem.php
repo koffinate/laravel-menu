@@ -29,7 +29,7 @@ class MenuItem
 
     public function isActive(): bool
     {
-        if ($this->type == MenuType::Route) {
+        if ($this->type == MenuType::ROUTE) {
             return $this->isActiveRoute($this->activeRoute ?? $this->name, $this->param);
         }
 
