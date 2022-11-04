@@ -36,7 +36,11 @@ class Menu
         return collect();
     }
 
-    public static function route(string $name, string $title, array $attribute = [], array $param = [], ?string $activeRoute = null, Closure|bool $resolver = true): static
+    public static function route(
+        string $name, string $title, array $attribute = [], array $param = [],
+        ?string $activeRoute = null, ?array $activeRouteParam = null,
+        Closure|bool $resolver = true
+    ): static
     {
         return static::add(
             type: MenuType::ROUTE,
@@ -45,11 +49,16 @@ class Menu
             attribute: $attribute,
             param: $param,
             activeRoute: $activeRoute,
+            activeRouteParam: $activeRouteParam,
             resolver: $resolver,
         );
     }
 
-    public static function url(string $name, string $title, array $attribute = [], array $param = [], ?string $activeRoute = null, Closure|bool $resolver = true): static
+    public static function url(
+        string $name, string $title, array $attribute = [], array $param = [],
+        ?string $activeRoute = null, ?array $activeRouteParam = null,
+        Closure|bool $resolver = true
+    ): static
     {
         return static::add(
             type: MenuType::URL,
@@ -58,11 +67,16 @@ class Menu
             attribute: $attribute,
             param: $param,
             activeRoute: $activeRoute,
+            activeRouteParam: $activeRouteParam,
             resolver: $resolver,
         );
     }
 
-    public static function add(MenuType $type, string $name, string $title, array $attribute = [], array $param = [], ?string $activeRoute = null, Closure|bool $resolver = true): static
+    public static function add(
+        MenuType $type, string $name, string $title, array $attribute = [], array $param = [],
+        ?string $activeRoute = null, ?array $activeRouteParam = null,
+        Closure|bool $resolver = true
+    ): static
     {
         $factory = static::getFactory();
         $factory->add(
@@ -73,6 +87,7 @@ class Menu
                 attribute: $attribute,
                 param: $param,
                 activeRoute:$activeRoute,
+                activeRouteParam: $activeRouteParam,
                 group: static::$group,
                 resolver: $resolver,
             )
