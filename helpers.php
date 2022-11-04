@@ -24,7 +24,7 @@ if (!function_exists('menuType')) {
      *
      * @return ?MenuType
      */
-    function menuType(?string $type): ?MenuType
+    function menuType(?string $type = null): ?MenuType
     {
         if ($type) {
             MenuType::tryFrom($type);
