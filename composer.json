@@ -1,7 +1,11 @@
 {
   "name": "koffinate/laravel-menu",
   "description": "Laravel Menu Collector",
-  "keywords": ["php", "laravel", "library", "much", "yusron", "arif", "yusronarif"],
+  "keywords": [
+    "php", "laravel", "library",
+    "koffinate", "koffin", "coffee",
+    "much", "yusron", "arif", "yusronarif"
+  ],
   "type": "library",
   "license": "MIT",
   "authors": [

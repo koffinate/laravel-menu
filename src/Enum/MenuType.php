@@ -4,6 +4,6 @@ namespace Koffin\Menu\Enum;
 
 enum MenuType: string
 {
-    case Route = 'route';
+    case ROUTE = 'route';
     case URL = 'url';
 }

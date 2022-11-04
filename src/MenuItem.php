@@ -13,6 +13,7 @@ class MenuItem
         public array $attribute = [],
         public string $name,
         public array $param = [],
+        public ?string $activeRoute = null,
         public string $group = 'Default',
         public \Closure|bool $resolver = true,
     )
@@ -29,13 +30,13 @@ class MenuItem
     public function isActive(): bool
     {
         if ($this->type == MenuType::Route) {
-            return $this->activeRoute($this->name, $this->param);
+            return $this->isActiveRoute($this->activeRoute ?? $this->name, $this->param);
         }
 
         return false;
     }
 
-    private function activeRoute(string $route = '', array $params = []): bool
+    private function isActiveRoute(string $route = '', array $params = []): bool
     {
         if (empty($route = trim($route))) {
             return false;

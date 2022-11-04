@@ -1,10 +1,15 @@
 <?php
 
+use Koffin\Menu\Enum\MenuType;
 use Koffin\Menu\Menu;
 
 if (!function_exists('menus')) {
     /**
-     * @param null|string $menu
+     * Menu instance
+     *
+     * @param ?string $menu
+     * @param ?string $group
+     *
      * @return Menu
      */
     function menus(?string $menu = null, ?string $group = null): Menu
@@ -17,10 +22,13 @@ if (!function_exists('menuType')) {
     /**
      * Menu Type Enum
      *
-     * @return MenuType
+     * @return ?MenuType
      */
-    function menuType(): string
+    function menuType(?string $type): ?MenuType
     {
-        return "\\Koffin\\Menu\\Enum\\MenuType";
+        if ($type) {
+            MenuType::tryFrom($type);
+        }
+        return new MenuType;
     }
 }

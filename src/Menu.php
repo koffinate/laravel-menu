@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Koffin\Menu;
 
 use Closure;
@@ -15,10 +17,10 @@ class Menu
 
     public function __construct(?string $menu = null, ?string $group = null)
     {
-        if (!empty($menu)) {
+        if ($menu) {
             static::$menu = $menu;
         }
-        if (!empty($group)) {
+        if ($group) {
             static::$group = $group;
         }
     }
@@ -34,21 +36,46 @@ class Menu
         return collect();
     }
 
-    public static function route(string $name, string $title, array $attribute = [], array $param = [], Closure|bool $resolver = true): static
+    public static function route(string $name, string $title, array $attribute = [], array $param = [], ?string $activeRoute = null, Closure|bool $resolver = true): static
     {
-        return static::add(type: MenuType::Route, name: $name, title: $title, attribute: $attribute, param: $param, resolver: $resolver);
+        return static::add(
+            type: MenuType::ROUTE,
+            name: $name,
+            title: $title,
+            attribute: $attribute,
+            param: $param,
+            activeRoute: $activeRoute,
+            resolver: $resolver,
+        );
     }
 
-    public static function url(string $name, string $title, array $attribute = [], array $param = [], Closure|bool $resolver = true): static
+    public static function url(string $name, string $title, array $attribute = [], array $param = [], ?string $activeRoute = null, Closure|bool $resolver = true): static
     {
-        return static::add(type: MenuType::URL, name: $name, title: $title, attribute: $attribute, param: $param, resolver: $resolver);
+        return static::add(
+            type: MenuType::URL,
+            name: $name,
+            title: $title,
+            attribute: $attribute,
+            param: $param,
+            activeRoute: $activeRoute,
+            resolver: $resolver,
+        );
     }
 
-    public static function add(MenuType $type, string $name, string $title, array $attribute = [], array $param = [], Closure|bool $resolver = true): static
+    public static function add(MenuType $type, string $name, string $title, array $attribute = [], array $param = [], ?string $activeRoute = null, Closure|bool $resolver = true): static
     {
         $factory = static::getFactory();
         $factory->add(
-            new MenuItem(type: $type, name: $name, title: $title, attribute: $attribute, param: $param, group: static::$group, resolver: $resolver)
+            new MenuItem(
+                type: $type,
+                name: $name,
+                title: $title,
+                attribute: $attribute,
+                param: $param,
+                activeRoute:$activeRoute,
+                group: static::$group,
+                resolver: $resolver,
+            )
         );
         return new static();
     }
