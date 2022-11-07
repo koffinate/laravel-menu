@@ -14,7 +14,7 @@ if (!function_exists('menus')) {
      */
     function menus(?string $menu = null, ?string $group = null): Menu
     {
-        return app('menus', ['menu' => $menu, 'group' => $group]);
+        return new Menu(menu: $menu, group: $group);
     }
 }
 
