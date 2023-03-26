@@ -1,20 +1,19 @@
 <?php
 
 use Koffin\Menu\Enum\MenuType;
-use Koffin\Menu\Menu;
 
 if (!function_exists('menus')) {
     /**
      * Menu instance
      *
-     * @param ?string $menu
+     * @param ?string $name
      * @param ?string $group
      *
-     * @return Menu
+     * @return Koffin\Menu\Menu
      */
-    function menus(?string $menu = null, ?string $group = null): Menu
+    function menus(?string $name = null, ?string $group = null): \Koffin\Menu\Contracts\Menu
     {
-        return new Menu(menu: $menu, group: $group);
+        return new \Koffin\Menu\Menu(name: $name, group: $group);
     }
 }
 
@@ -22,12 +21,14 @@ if (!function_exists('menuType')) {
     /**
      * Menu Type Enum
      *
+     * @param string|null $type
+     *
      * @return MenuType|string|null
      */
     function menuType(?string $type = null): MenuType|string|null
     {
         if ($type) {
-            MenuType::tryFrom($type);
+            return MenuType::tryFrom($type);
         }
         return MenuType::class;
     }

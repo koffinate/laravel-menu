@@ -5,14 +5,14 @@ namespace Koffin\Menu;
 use Exception;
 use Koffin\Menu\Enum\MenuType;
 
-class MenuItem
+class MenuItem implements \Koffin\Menu\Contracts\MenuItem
 {
     public function __construct(
         public MenuType $type,
         public string $title,
-        public array $attribute = [],
         public string $name,
         public array $param = [],
+        public array $attribute = [],
         public ?string $activeRoute = null,
         public ?array $activeRouteParam = null,
         public string $group = 'Default',
