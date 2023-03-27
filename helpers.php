@@ -2,13 +2,12 @@
 
 use Koffin\Menu\Enum\MenuType;
 
-if (!function_exists('menus')) {
+if (! function_exists('menus')) {
     /**
-     * Menu instance
+     * Menu instance.
      *
-     * @param ?string $name
-     * @param ?string $group
-     *
+     * @param  ?string  $name
+     * @param  ?string  $group
      * @return \Koffin\Menu\Contracts\Menu
      */
     function menus(?string $name = null, ?string $group = null): \Koffin\Menu\Contracts\Menu
@@ -17,12 +16,11 @@ if (!function_exists('menus')) {
     }
 }
 
-if (!function_exists('menuType')) {
+if (! function_exists('menuType')) {
     /**
-     * Menu Type Enum
+     * Menu Type Enum.
      *
-     * @param string|null $type
-     *
+     * @param  string|null  $type
      * @return MenuType|string|null
      */
     function menuType(?string $type = null): MenuType|string|null
@@ -30,6 +28,7 @@ if (!function_exists('menuType')) {
         if ($type) {
             return MenuType::tryFrom($type);
         }
+
         return MenuType::class;
     }
 }
