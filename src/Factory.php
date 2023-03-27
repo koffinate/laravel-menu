@@ -18,24 +18,23 @@ class Factory implements \Koffin\Menu\Contracts\Menu
     private static string $childName;
 
     /**
-     * @param string|null $name
-     * @param string|null $group
-     * @param array $groupAttribute
+     * @param  string|null  $name
+     * @param  string|null  $group
+     * @param  array  $groupAttribute
      */
     public function __construct(?string $name = null, ?string $group = null, array $groupAttribute = [])
     {
         static::$name = $name ?? 'main';
         static::$group = $group ?? 'Default';
         static::$groupAttribute = new MenuItemAttribute($groupAttribute);
-        if (!static::$factory instanceof Fluent) {
+        if (! static::$factory instanceof Fluent) {
             static::$factory = new Fluent();
         }
     }
 
     /**
-     * @param bool $grouped
-     * @param bool $resolvedOnly
-     *
+     * @param  bool  $grouped
+     * @param  bool  $resolvedOnly
      * @return \Koffin\Menu\MenuCollection
      */
     public function get(bool $grouped = true, bool $resolvedOnly = true): MenuCollection
@@ -54,21 +53,21 @@ class Factory implements \Koffin\Menu\Contracts\Menu
 
                 return $menus;
             }
-        } catch (Exception $e) {}
+        } catch (Exception $e) {
+        }
 
         return new MenuCollection();
     }
 
     /**
-     * @param string $name
-     * @param string $title
-     * @param array $attribute
-     * @param array $param
-     * @param string|null $activeRoute
-     * @param array|null $activeRouteParam
-     * @param \Closure|bool $resolver
-     * @param bool $hasChild
-     *
+     * @param  string  $name
+     * @param  string  $title
+     * @param  array  $attribute
+     * @param  array  $param
+     * @param  string|null  $activeRoute
+     * @param  array|null  $activeRouteParam
+     * @param  \Closure|bool  $resolver
+     * @param  bool  $hasChild
      * @return static
      */
     public static function route(
@@ -76,8 +75,7 @@ class Factory implements \Koffin\Menu\Contracts\Menu
         array $attribute = [], array $param = [],
         ?string $activeRoute = null, ?array $activeRouteParam = null,
         Closure|bool $resolver = true, bool $hasChild = false
-    ): static
-    {
+    ): static {
         return static::add(
             type: MenuType::ROUTE,
             name: $name,
@@ -91,15 +89,14 @@ class Factory implements \Koffin\Menu\Contracts\Menu
     }
 
     /**
-     * @param string $name
-     * @param string $title
-     * @param array $attribute
-     * @param array $param
-     * @param string|null $activeRoute
-     * @param array|null $activeRouteParam
-     * @param \Closure|bool $resolver
-     * @param bool $hasChild
-     *
+     * @param  string  $name
+     * @param  string  $title
+     * @param  array  $attribute
+     * @param  array  $param
+     * @param  string|null  $activeRoute
+     * @param  array|null  $activeRouteParam
+     * @param  \Closure|bool  $resolver
+     * @param  bool  $hasChild
      * @return static
      */
     public static function url(
@@ -107,8 +104,7 @@ class Factory implements \Koffin\Menu\Contracts\Menu
         array $attribute = [], array $param = [],
         ?string $activeRoute = null, ?array $activeRouteParam = null,
         Closure|bool $resolver = true, bool $hasChild = false
-    ): static
-    {
+    ): static {
         return static::add(
             type: MenuType::URL,
             name: $name,
@@ -122,15 +118,14 @@ class Factory implements \Koffin\Menu\Contracts\Menu
     }
 
     /**
-     * @param \Koffin\Menu\Enum\MenuType $type
-     * @param string $name
-     * @param string $title
-     * @param array $attribute
-     * @param array $param
-     * @param string|null $activeRoute
-     * @param array|null $activeRouteParam
-     * @param \Closure|bool $resolver
-     *
+     * @param  \Koffin\Menu\Enum\MenuType  $type
+     * @param  string  $name
+     * @param  string  $title
+     * @param  array  $attribute
+     * @param  array  $param
+     * @param  string|null  $activeRoute
+     * @param  array|null  $activeRouteParam
+     * @param  \Closure|bool  $resolver
      * @return static
      */
     public static function add(
@@ -138,8 +133,7 @@ class Factory implements \Koffin\Menu\Contracts\Menu
         array $attribute = [], array $param = [],
         ?string $activeRoute = null, ?array $activeRouteParam = null,
         Closure|bool $resolver = true
-    ): static
-    {
+    ): static {
         $factory = static::getFactory();
         $factory->add(
             new MenuItem(
@@ -154,6 +148,7 @@ class Factory implements \Koffin\Menu\Contracts\Menu
                 resolver: $resolver,
             )
         );
+
         return new static(name: static::$name, group: static::$group);
     }
 
@@ -162,9 +157,10 @@ class Factory implements \Koffin\Menu\Contracts\Menu
      */
     private static function getFactory(): MenuCollection
     {
-        if (!static::$factory[static::$name] instanceof MenuCollection) {
+        if (! static::$factory[static::$name] instanceof MenuCollection) {
             static::$factory[static::$name] = new MenuCollection();
         }
+
         return static::$factory[static::$name];
     }
 }
