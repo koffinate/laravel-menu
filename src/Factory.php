@@ -6,24 +6,27 @@ namespace Koffin\Menu;
 
 use Closure;
 use Exception;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Fluent;
 use Koffin\Menu\Enum\MenuType;
 
-class Menu implements \Koffin\Menu\Contracts\Menu
+class Factory implements \Koffin\Menu\Contracts\Menu
 {
     public static string $name;
     public static string $group;
+    public static ?MenuItemAttribute $groupAttribute = null;
     public static ?Fluent $factory = null;
+    private static string $childName;
 
     /**
      * @param string|null $name
      * @param string|null $group
+     * @param array $groupAttribute
      */
-    public function __construct(?string $name = null, ?string $group = null)
+    public function __construct(?string $name = null, ?string $group = null, array $groupAttribute = [])
     {
         static::$name = $name ?? 'main';
         static::$group = $group ?? 'Default';
+        static::$groupAttribute = new MenuItemAttribute($groupAttribute);
         if (!static::$factory instanceof Fluent) {
             static::$factory = new Fluent();
         }
@@ -64,13 +67,15 @@ class Menu implements \Koffin\Menu\Contracts\Menu
      * @param string|null $activeRoute
      * @param array|null $activeRouteParam
      * @param \Closure|bool $resolver
+     * @param bool $hasChild
      *
      * @return static
      */
     public static function route(
-        string $name, string $title, array $attribute = [], array $param = [],
+        string $name, string $title,
+        array $attribute = [], array $param = [],
         ?string $activeRoute = null, ?array $activeRouteParam = null,
-        Closure|bool $resolver = true
+        Closure|bool $resolver = true, bool $hasChild = false
     ): static
     {
         return static::add(
@@ -93,13 +98,15 @@ class Menu implements \Koffin\Menu\Contracts\Menu
      * @param string|null $activeRoute
      * @param array|null $activeRouteParam
      * @param \Closure|bool $resolver
+     * @param bool $hasChild
      *
      * @return static
      */
     public static function url(
-        string $name, string $title, array $attribute = [], array $param = [],
+        string $name, string $title,
+        array $attribute = [], array $param = [],
         ?string $activeRoute = null, ?array $activeRouteParam = null,
-        Closure|bool $resolver = true
+        Closure|bool $resolver = true, bool $hasChild = false
     ): static
     {
         return static::add(
@@ -127,7 +134,8 @@ class Menu implements \Koffin\Menu\Contracts\Menu
      * @return static
      */
     public static function add(
-        MenuType $type, string $name, string $title, array $attribute = [], array $param = [],
+        MenuType $type, string $name, string $title,
+        array $attribute = [], array $param = [],
         ?string $activeRoute = null, ?array $activeRouteParam = null,
         Closure|bool $resolver = true
     ): static

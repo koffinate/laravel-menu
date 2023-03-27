@@ -9,11 +9,11 @@ if (!function_exists('menus')) {
      * @param ?string $name
      * @param ?string $group
      *
-     * @return Koffin\Menu\Menu
+     * @return \Koffin\Menu\Contracts\Menu
      */
     function menus(?string $name = null, ?string $group = null): \Koffin\Menu\Contracts\Menu
     {
-        return new \Koffin\Menu\Menu(name: $name, group: $group);
+        return new \Koffin\Menu\Factory(name: $name, group: $group);
     }
 }
 
