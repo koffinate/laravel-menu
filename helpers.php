@@ -6,10 +6,9 @@ if (! function_exists('menus')) {
     /**
      * Menu instance.
      *
-     * @param  ?string $name
-     * @param  ?string $group
-     * @param array $groupAttribute
-     *
+     * @param  ?string  $name
+     * @param  ?string  $group
+     * @param  array  $groupAttribute
      * @return \Koffin\Menu\Contracts\Menu
      */
     function menus(?string $name = null, ?string $group = null, array $groupAttribute = []): \Koffin\Menu\Contracts\Menu
