@@ -11,10 +11,10 @@ use Koffin\Menu\Enum\MenuType;
 
 class Factory implements \Koffin\Menu\Contracts\Menu
 {
-    public static string $name;
-    public static string $group;
-    public static ?MenuItemAttribute $groupAttribute = null;
-    public static ?Fluent $factory = null;
+    private static string $name;
+    private static string $group;
+    private static ?MenuItemAttribute $groupAttribute = null;
+    private static ?Fluent $factory = null;
     private static string $childName;
 
     /**
@@ -151,6 +151,7 @@ class Factory implements \Koffin\Menu\Contracts\Menu
                 activeRoute: $activeRoute,
                 activeRouteParam: $activeRouteParam,
                 group: static::$group,
+                groupAttribute: static::$groupAttribute,
                 resolver: $resolver,
             )
         );

@@ -18,12 +18,16 @@ class MenuItem implements \Koffin\Menu\Contracts\MenuItem
         public ?string $activeRoute = null,
         public ?array $activeRouteParam = null,
         public string $group = 'Default',
+        public MenuItemAttribute|array $groupAttribute = [],
         public \Closure|bool $resolver = true,
         public bool $hasChild = false,
     )
     {
         if (is_array($this->attribute)) {
             $this->attribute = new MenuItemAttribute($this->attribute);
+        }
+        if (is_array($this->groupAttribute)) {
+            $this->groupAttribute = new MenuItemAttribute($this->groupAttribute);
         }
     }
 
