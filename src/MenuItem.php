@@ -21,8 +21,7 @@ class MenuItem implements \Koffin\Menu\Contracts\MenuItem
         public MenuItemAttribute|array $groupAttribute = [],
         public \Closure|bool $resolver = true,
         public bool $hasChild = false,
-    )
-    {
+    ) {
         if (is_array($this->attribute)) {
             $this->attribute = new MenuItemAttribute($this->attribute);
         }
@@ -33,9 +32,10 @@ class MenuItem implements \Koffin\Menu\Contracts\MenuItem
 
     public function resolve(): bool
     {
-        if($this->resolver instanceof \Closure) {
+        if ($this->resolver instanceof \Closure) {
             return (bool) $this->resolver->call($this);
         }
+
         return $this->resolver;
     }
 
@@ -96,7 +96,8 @@ class MenuItem implements \Koffin\Menu\Contracts\MenuItem
 
                 return true;
             }
-        } catch (Exception $e) {}
+        } catch (Exception $e) {
+        }
 
         return false;
     }
