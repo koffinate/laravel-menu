@@ -3,7 +3,6 @@
 namespace Koffin\Menu;
 
 use Illuminate\Support\Fluent;
-use Koffin\Menu\Enum\MenuType;
 
 class MenuItemAttribute
 {
