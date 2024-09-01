@@ -53,7 +53,7 @@ class MenuItem implements \Kfn\Menu\Contracts\MenuItem
         readonly public array|null $activeParam = null,
         readonly public \Closure|bool $resolver = true
     ) {
-        if (!$attribute instanceof MenuItemAttribute) {
+        if (! $attribute instanceof MenuItemAttribute) {
             $attribute = new MenuItemAttribute($attribute);
         }
 
@@ -100,7 +100,7 @@ class MenuItem implements \Kfn\Menu\Contracts\MenuItem
 
         try {
             if ($name->isEmpty()) {
-                throw new Exception("Menu item attribute name is empty");
+                throw new Exception('Menu item attribute name is empty');
             }
 
             $name = $name->toString();
@@ -135,7 +135,6 @@ class MenuItem implements \Kfn\Menu\Contracts\MenuItem
                 MenuType::URL => $this->getActiveByUrl($name),
                 default => false,
             };
-
         } catch (Exception $e) {
             app('log')->error($e->getMessage());
         }

@@ -25,7 +25,7 @@ class GroupedMenu extends Collection
                 title: $title,
                 attribute: $attributes,
                 sort: $sort
-            )
+            ),
         ]);
     }
 

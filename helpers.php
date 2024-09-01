@@ -10,7 +10,8 @@ if (! function_exists('menus')) {
      *
      * @return \Kfn\Menu\Contracts\GroupedMenu
      */
-    function menus(string|null $name = null) {
+    function menus(string|null $name = null)
+    {
         return new \Kfn\Menu\Factory(name: $name);
     }
 }

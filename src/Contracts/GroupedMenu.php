@@ -4,9 +4,8 @@ namespace Kfn\Menu\Contracts;
 
 interface GroupedMenu
 {
-
     /**
-     * Add GroupItem
+     * Add GroupItem.
      *
      * @param  string  $name
      * @param  string  $title
@@ -21,7 +20,7 @@ interface GroupedMenu
     ): static;
 
     /**
-     * Get Grouped Menu Collection
+     * Get Grouped Menu Collection.
      *
      * @param  string|null  $groupName
      * @param  bool  $resolvedOnly

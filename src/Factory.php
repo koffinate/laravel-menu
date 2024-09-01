@@ -30,7 +30,7 @@ class Factory implements \Kfn\Menu\Contracts\GroupedMenu
     }
 
     /**
-     * Add GroupItem
+     * Add GroupItem.
      *
      * @param  string  $name
      * @param  string  $title
@@ -45,7 +45,7 @@ class Factory implements \Kfn\Menu\Contracts\GroupedMenu
         object|array $attributes = [],
         int $sort = 0
     ): static {
-        if (!static::$factory[static::$name] instanceof GroupedMenu) {
+        if (! static::$factory[static::$name] instanceof GroupedMenu) {
             static::$factory[static::$name] = new GroupedMenu(
                 name: $name,
                 title: $title,
@@ -57,7 +57,7 @@ class Factory implements \Kfn\Menu\Contracts\GroupedMenu
     }
 
     /**
-     * Get Grouped Menu Collection
+     * Get Grouped Menu Collection.
      *
      * @param  string|null  $groupName
      * @param  bool  $resolvedOnly
@@ -78,6 +78,7 @@ class Factory implements \Kfn\Menu\Contracts\GroupedMenu
             $groupedMenu = $groupedMenu->each(function (GroupItem $group) {
                 $groupItems = $group->items->filter(fn ($it) => $it->resolve());
                 $group->items = $groupItems;
+
                 return $group;
             });
         }
