@@ -1,6 +1,6 @@
 <?php
 
-namespace Koffin\Menu\Enum;
+namespace Kfn\Menu\Enum;
 
 enum MenuType: string
 {

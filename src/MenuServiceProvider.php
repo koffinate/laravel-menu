@@ -1,6 +1,6 @@
 <?php
 
-namespace Koffin\Menu;
+namespace Kfn\Menu;
 
 use Illuminate\Support\ServiceProvider;
 
@@ -23,7 +23,7 @@ class MenuServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        $this->app->singleton('menus', fn ($app, $p) => new Factory(name: $p['name'] ?? null, group: $p['group'] ?? null));
+        $this->app->singleton('menus', fn ($app, $p) => new Factory(name: $p['name'] ?: null));
         $this->app->alias('menus', Factory::class);
     }
 }

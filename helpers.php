@@ -1,19 +1,17 @@
 <?php
 
-use Koffin\Menu\Enum\MenuType;
+use Kfn\Menu\Enum\MenuType;
 
 if (! function_exists('menus')) {
     /**
-     * Menu instance.
+     *  Menu instance.
      *
-     * @param  ?string  $name
-     * @param  ?string  $group
-     * @param  array  $groupAttribute
-     * @return \Koffin\Menu\Contracts\Menu
+     * @param  string|null  $name
+     *
+     * @return \Kfn\Menu\Contracts\GroupedMenu
      */
-    function menus(?string $name = null, ?string $group = null, array $groupAttribute = []): \Koffin\Menu\Contracts\Menu
-    {
-        return new \Koffin\Menu\Factory(name: $name, group: $group);
+    function menus(string|null $name = null) {
+        return new \Kfn\Menu\Factory(name: $name);
     }
 }
 
@@ -24,7 +22,7 @@ if (! function_exists('menuType')) {
      * @param  string|null  $type
      * @return MenuType|string|null
      */
-    function menuType(?string $type = null): MenuType|string|null
+    function menuType(string|null $type = null): MenuType|string|null
     {
         if ($type) {
             return MenuType::tryFrom($type);

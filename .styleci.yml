@@ -1,4 +1,4 @@
-version: 8.1
+version: 8.2
 preset: laravel
 disabled:
   - laravel_phpdoc_alignment

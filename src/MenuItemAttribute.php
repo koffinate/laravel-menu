@@ -1,35 +1,54 @@
 <?php
 
-namespace Koffin\Menu;
+namespace Kfn\Menu;
 
 use Illuminate\Support\Fluent;
 
-class MenuItemAttribute
+/**
+ * @extends \Illuminate\Support\Fluent
+ *
+ * @property string $icon
+ * @property string $class
+ * @property string $style
+ * @property string $tags
+ */
+class MenuItemAttribute extends Fluent
 {
-    public string|null $icon = null;
-    public string|array|null $styleClass = null;
-    public string|array|null $tags = null;
-
-    public function __construct(public Fluent|array $attributes)
+    /**
+     * @param  array|object  $attributes
+     */
+    public function __construct(array|object $attributes)
     {
-        if (is_array($this->attributes)) {
-            $this->attributes = new Fluent($this->attributes);
-        }
-        $this->setAttribute($this->attributes);
+        parent::__construct($attributes);
+        $this->setAttribute();
     }
 
-    private function setAttribute(Fluent $attributes): void
+    /**
+     * @return void
+     */
+    private function setAttribute(): void
     {
-        $this->icon = $attributes->icon ?? null;
-
-        $this->styleClass = $attributes->styleClass ?? null;
-        if (is_array($this->styleClass)) {
-            $this->styleClass = implode(' ', $this->styleClass);
+        $icon = $this->get('icon');
+        if ($icon && (is_array($icon) || is_object($icon))) {
+            $this->offsetSet('icon', implode(' ', (array)$icon));
         }
 
-        $this->tags = $attributes->tags ?? null;
-        if (is_array($this->tags)) {
-            $this->tags = implode(' ', $this->tags);
+        $cssClass = $this->get('class');
+        if ($cssClass && (is_array($cssClass) || is_object($cssClass))) {
+            $cssClass = implode(' ', (array)$cssClass);
+            $this->offsetSet('class', $cssClass);
+        }
+
+        $cssStyle = $this->get('style');
+        if ($cssStyle && (is_array($cssStyle) || is_object($cssStyle))) {
+            $cssStyle = implode(';', (array)$cssStyle);
+            $this->offsetSet('style', $cssStyle);
+        }
+
+        $tags = $this->get('tags');
+        if ($tags && (is_array($tags) || is_object($tags))) {
+            $tags = implode(' ', (array)$tags);
+            $this->offsetSet('tags', $tags);
         }
     }
 }

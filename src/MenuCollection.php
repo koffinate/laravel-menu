@@ -1,6 +1,6 @@
 <?php
 
-namespace Koffin\Menu;
+namespace Kfn\Menu;
 
 use Illuminate\Support\Collection;
 
