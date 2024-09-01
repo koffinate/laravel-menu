@@ -58,7 +58,7 @@ class GroupItem implements \Kfn\Menu\Contracts\GroupItem
         array|object $attribute = [],
         int $sort = 0
     ) {
-        if (!$attribute instanceof MenuItemAttribute) {
+        if (! $attribute instanceof MenuItemAttribute) {
             $attribute = new MenuItemAttribute($attribute);
         }
         if (! static::$factory instanceof Fluent) {
@@ -196,10 +196,6 @@ class GroupItem implements \Kfn\Menu\Contracts\GroupItem
 
         return static::$factory[static::$collectionName];
     }
-
-
-
-
 
     // /**
     //  * @return string
