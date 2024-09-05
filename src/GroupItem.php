@@ -53,8 +53,8 @@ class GroupItem implements \Kfn\Menu\Contracts\GroupItem
      * @param  int  $sort
      */
     public function __construct(
-        string $name,
-        string $title,
+        string $name = 'default',
+        string $title = 'Default',
         array|object $attribute = [],
         int $sort = 0
     ) {

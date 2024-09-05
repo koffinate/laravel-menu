@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Kfn\Menu;
 
+use Exception;
 use Illuminate\Support\Fluent;
+use Throwable;
 
 /**
  * @implements \Kfn\Menu\Contracts\GroupedMenu
@@ -21,7 +23,7 @@ class Factory implements \Kfn\Menu\Contracts\GroupedMenu
      * @param  string|null  $name
      */
     public function __construct(
-        string|null $name = null
+        string|null $name = null,
     ) {
         static::$name = $name ?: 'main';
         if (! static::$factory instanceof Fluent) {
@@ -43,14 +45,18 @@ class Factory implements \Kfn\Menu\Contracts\GroupedMenu
         string $name,
         string $title,
         object|array $attributes = [],
-        int $sort = 0
+        int $sort = 0,
     ): static {
         if (! static::$factory[static::$name] instanceof GroupedMenu) {
-            static::$factory[static::$name] = new GroupedMenu(
-                name: $name,
-                title: $title,
-                attributes: $attributes
-            );
+            static::$factory[static::$name] = new GroupedMenu();
+        }
+        if (! static::$factory[static::$name]->has($name)) {
+            static::$factory[static::$name]->add([
+                'name' => $name,
+                'title' => $title,
+                'attributes' => $attributes,
+                'sort' => $sort,
+            ]);
         }
 
         return $this;
@@ -63,32 +69,49 @@ class Factory implements \Kfn\Menu\Contracts\GroupedMenu
      * @param  bool  $resolvedOnly
      *
      * @return \Kfn\Menu\GroupedMenu|\Kfn\Menu\GroupItem
+     * @throws \Throwable
      */
     public function get(
         string|null $groupName = null,
-        bool $resolvedOnly = true
+        bool $resolvedOnly = true,
     ): GroupedMenu|GroupItem {
-        $groupedMenu = static::$factory[static::$name];
+        try {
+            $groupedMenu = static::$factory->get(static::$name);
+            if (! $groupedMenu instanceof GroupedMenu) {
+                $groupedMenu = new GroupedMenu();
+            }
 
-        if ($groupName) {
-            $groupedMenu = $groupedMenu->get($groupName);
+            if (! $groupedMenu instanceof GroupedMenu) {
+                throw new Exception('menu not yet initialized');
+            }
+
+            if ($groupName) {
+                $groupedMenu = $groupedMenu->get($groupName);
+                if (! $groupedMenu instanceof GroupItem) {
+                    $groupedMenu = new GroupItem();
+                }
+            }
+
+            if ($groupedMenu instanceof GroupedMenu && $resolvedOnly && $groupedMenu->isNotEmpty()) {
+                $groupedMenu = $groupedMenu->each(function (GroupItem $group) {
+                    if ($group->items->isNotEmpty()) {
+                        $groupItems = $group->items->filter(fn (MenuItem $it) => $it->resolve());
+                        $group->items = $groupItems;
+                    }
+
+                    return $group;
+                });
+            }
+
+            return $groupedMenu;
+        } catch (Throwable $e) {
+            throw_if(app()->hasDebugModeEnabled(), $e);
+            app('log')->error('failed on get menu factory\n', [
+                'message' => $e->getMessage(),
+                'traces' => $e->getTraceAsString(),
+            ]);
         }
 
-        if ($groupedMenu instanceof GroupedMenu && $resolvedOnly) {
-            $groupedMenu = $groupedMenu->each(function (GroupItem $group) {
-                $groupItems = $group->items->filter(fn ($it) => $it->resolve());
-                $group->items = $groupItems;
-
-                return $group;
-            });
-        }
-
-        // throw_if(app()->hasDebugModeEnabled(), $e);
-        // app('log')->error('failed on get menu factory\n', [
-        //     'message' => $e->getMessage(),
-        //     'traces' => $e->getTraceAsString(),
-        // ]);
-
-        return $groupedMenu;
+        return new GroupedMenu();
     }
 }

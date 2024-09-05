@@ -59,7 +59,6 @@ class MenuItem implements \Kfn\Menu\Contracts\MenuItem
 
         $this->attribute = $attribute;
         $this->items = new MenuCollection();
-        $this->resolveHref();
     }
 
     /**
@@ -75,6 +74,8 @@ class MenuItem implements \Kfn\Menu\Contracts\MenuItem
      */
     public function resolve(): bool
     {
+        $this->resolveHref();
+
         if ($this->resolver instanceof \Closure) {
             return (bool) $this->resolver->call($this);
         }
@@ -101,6 +102,9 @@ class MenuItem implements \Kfn\Menu\Contracts\MenuItem
         try {
             if ($name->isEmpty()) {
                 throw new Exception('Menu item attribute name is empty');
+            }
+            if ($name->is('#')) {
+                throw new Exception('hashed link');
             }
 
             $name = $name->toString();
