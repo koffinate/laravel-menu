@@ -26,7 +26,7 @@ class Factory implements \Kfn\Menu\Contracts\GroupedMenu
         string|null $name = null,
     ) {
         static::$name = $name ?: 'main';
-        if (!static::$factory instanceof Fluent) {
+        if (! static::$factory instanceof Fluent) {
             static::$factory = new Fluent();
         }
     }
@@ -47,10 +47,10 @@ class Factory implements \Kfn\Menu\Contracts\GroupedMenu
         object|array $attributes = [],
         int $sort = 0,
     ): static {
-        if (!static::$factory[static::$name] instanceof GroupedMenu) {
+        if (! static::$factory[static::$name] instanceof GroupedMenu) {
             static::$factory[static::$name] = new GroupedMenu();
         }
-        if (!static::$factory[static::$name]->has($name)) {
+        if (! static::$factory[static::$name]->has($name)) {
             static::$factory[static::$name]->add([
                 'name' => $name,
                 'title' => $title,
@@ -81,7 +81,7 @@ class Factory implements \Kfn\Menu\Contracts\GroupedMenu
                 $groupedMenu = new GroupedMenu();
             }
 
-            if (!$groupedMenu instanceof GroupedMenu) {
+            if (! $groupedMenu instanceof GroupedMenu) {
                 throw new Exception('menu not yet initialized');
             }
 
@@ -95,7 +95,7 @@ class Factory implements \Kfn\Menu\Contracts\GroupedMenu
             if ($groupedMenu instanceof GroupedMenu && $resolvedOnly && $groupedMenu->isNotEmpty()) {
                 $groupedMenu = $groupedMenu->each(function (GroupItem $group) {
                     if ($group->items->isNotEmpty()) {
-                        $groupItems = $group->items->filter(fn(MenuItem $it) => $it->resolve());
+                        $groupItems = $group->items->filter(fn (MenuItem $it) => $it->resolve());
                         $group->items = $groupItems;
                     }
 
