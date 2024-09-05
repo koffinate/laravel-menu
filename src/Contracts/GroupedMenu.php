@@ -10,6 +10,7 @@ interface GroupedMenu
      * @param  string  $name
      * @param  string  $title
      * @param  array|object  $attributes
+     * @param  int  $sort
      *
      * @return static
      */
@@ -17,6 +18,7 @@ interface GroupedMenu
         string $name,
         string $title,
         array|object $attributes = [],
+        int $sort = 0
     ): static;
 
     /**
