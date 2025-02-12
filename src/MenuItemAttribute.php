@@ -29,8 +29,14 @@ class MenuItemAttribute extends Fluent
     private function setAttribute(): void
     {
         $icon = $this->get('icon');
+        $icons = [];
         if ($icon && (is_array($icon) || is_object($icon))) {
-            $this->offsetSet('icon', implode(' ', (array) $icon));
+            foreach ((array) $icon as $_icon) {
+                $icons[] = config('koffinate.menu-icon.'.$_icon) ?: $_icon;
+            }
+            $this->offsetSet('icon', implode(' ', $icons));
+        } else {
+            $this->offsetSet('icon', config('koffinate.menu-icon.'.$icon) ?: $icon);
         }
 
         $cssClass = $this->get('class');
@@ -50,5 +56,6 @@ class MenuItemAttribute extends Fluent
             $tags = implode(' ', (array) $tags);
             $this->offsetSet('tags', $tags);
         }
+        unset($icons, $icon, $cssClass, $cssStyle, $tags);
     }
 }
