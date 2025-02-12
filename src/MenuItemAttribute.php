@@ -32,11 +32,11 @@ class MenuItemAttribute extends Fluent
         $icons = [];
         if ($icon && (is_array($icon) || is_object($icon))) {
             foreach ((array) $icon as $_icon) {
-                $icons[] = config('koffinate.menu-icon.' . $_icon) ?: $_icon;
+                $icons[] = config('koffinate.menu-icon.'.$_icon) ?: $_icon;
             }
             $this->offsetSet('icon', implode(' ', $icons));
         } else {
-            $this->offsetSet('icon', config('koffinate.menu-icon.' . $icon) ?: $icon);
+            $this->offsetSet('icon', config('koffinate.menu-icon.'.$icon) ?: $icon);
         }
 
         $cssClass = $this->get('class');
