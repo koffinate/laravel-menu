@@ -79,7 +79,7 @@ class GroupItem implements \Kfn\Menu\Contracts\GroupItem
      * @param  array  $param
      * @param  array  $attribute
      * @param  int  $sort
-     * @param  string|null  $activeRoute
+     * @param  string|array|null  $activeRoute
      * @param  array|null  $activeRouteParam
      * @param  \Closure|bool  $resolver
      *
@@ -91,7 +91,7 @@ class GroupItem implements \Kfn\Menu\Contracts\GroupItem
         array $param = [],
         array $attribute = [],
         int $sort = 0,
-        string|null $activeRoute = null,
+        string|array|null $activeRoute = null,
         array|null $activeRouteParam = null,
         Closure|bool $resolver = true
     ): static {
@@ -114,7 +114,7 @@ class GroupItem implements \Kfn\Menu\Contracts\GroupItem
      * @param  array  $param
      * @param  array  $attribute
      * @param  int  $sort
-     * @param  string|null  $activeUrl
+     * @param  string|array|null  $activeUrl
      * @param  array|null  $activeUrlParam
      * @param  \Closure|bool  $resolver
      *
@@ -126,7 +126,7 @@ class GroupItem implements \Kfn\Menu\Contracts\GroupItem
         array $param = [],
         array $attribute = [],
         int $sort = 0,
-        string|null $activeUrl = null,
+        string|array|null $activeUrl = null,
         array|null $activeUrlParam = null,
         Closure|bool $resolver = true
     ): static {
@@ -150,7 +150,7 @@ class GroupItem implements \Kfn\Menu\Contracts\GroupItem
      * @param  array  $param
      * @param  array  $attribute
      * @param  int  $sort
-     * @param  string|null  $activeName
+     * @param  string|array|null  $activeName
      * @param  array|null  $activeParam
      * @param  \Closure|bool  $resolver
      *
@@ -163,7 +163,7 @@ class GroupItem implements \Kfn\Menu\Contracts\GroupItem
         array $param = [],
         array $attribute = [],
         int $sort = 0,
-        string|null $activeName = null,
+        string|array|null $activeName = null,
         array|null $activeParam = null,
         Closure|bool $resolver = true
     ): static {

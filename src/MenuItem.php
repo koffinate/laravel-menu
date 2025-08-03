@@ -38,7 +38,7 @@ class MenuItem implements \Kfn\Menu\Contracts\MenuItem
      * @param  array  $param
      * @param  array|object  $attribute
      * @param  int  $sort
-     * @param  string|null  $activeName
+     * @param  string|array|null  $activeName
      * @param  array|null  $activeParam
      * @param  \Closure|bool  $resolver
      */
@@ -49,7 +49,7 @@ class MenuItem implements \Kfn\Menu\Contracts\MenuItem
         readonly public array $param = [],
         array|object $attribute = [],
         readonly public int $sort = 0,
-        readonly public string|null $activeName = null,
+        readonly public string|array|null $activeName = null,
         readonly public array|null $activeParam = null,
         readonly public \Closure|bool $resolver = true
     ) {
@@ -124,19 +124,22 @@ class MenuItem implements \Kfn\Menu\Contracts\MenuItem
      *
      * @return bool
      */
-    private function getActiveStatus(string|null $name = '', array $params = []): bool
+    private function getActiveStatus(string|array|null $name = '', array $params = []): bool
     {
-        $name = str($name)->trim();
+        $name = collect((array) $name)->flatMap(function ($nm) {
+            $nm = preg_replace('/\s+|\h+/', '', $nm);
+            if (!empty($nm)) {
+                return MenuType::ROUTE === $this->type ? [$nm, $nm.'.*'] : [$nm, $nm.'/*'];
+            }
+        });
         if ($name->isEmpty()) {
             return false;
         }
 
         try {
-            $name = $name->toString();
-
             return match ($this->type) {
-                MenuType::ROUTE => $this->getActiveByRoute($name, $params),
-                MenuType::URL => $this->getActiveByUrl($name),
+                MenuType::ROUTE => $this->getActiveByRoute($name->toArray(), $params),
+                MenuType::URL => $this->getActiveByUrl($name->toArray()),
                 default => false,
             };
         } catch (Exception $e) {
@@ -146,14 +149,14 @@ class MenuItem implements \Kfn\Menu\Contracts\MenuItem
         return false;
     }
 
-    private function getActiveByUrl(string $name): bool
+    private function getActiveByUrl(array $names): bool
     {
-        return request()->is($name, "{$name}.*");
+        return request()->is($names);
     }
 
-    private function getActiveByRoute(string $name, array $params = []): bool
+    private function getActiveByRoute(array $names, array $params = []): bool
     {
-        if (request()->routeIs($name, "{$name}.*")) {
+        if (request()->routeIs($names)) {
             if (empty($params)) {
                 return true;
             }
