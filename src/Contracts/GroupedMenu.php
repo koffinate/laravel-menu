@@ -30,7 +30,7 @@ interface GroupedMenu
      * @return \Kfn\Menu\GroupedMenu|\Kfn\Menu\GroupItem
      */
     public function get(
-        string|null $groupName = null,
+        ?string $groupName = null,
         bool $resolvedOnly = true
     ): \Kfn\Menu\GroupedMenu|\Kfn\Menu\GroupItem;
 }

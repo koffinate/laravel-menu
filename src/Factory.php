@@ -17,13 +17,13 @@ class Factory implements \Kfn\Menu\Contracts\GroupedMenu
     private static string $name;
 
     /** @var \Illuminate\Support\Fluent|null */
-    private static Fluent|null $factory = null;
+    private static ?Fluent $factory = null;
 
     /**
      * @param  string|null  $name
      */
     public function __construct(
-        string|null $name = null,
+        ?string $name = null,
     ) {
         static::$name = $name ?: 'main';
         if (! static::$factory instanceof Fluent) {
@@ -72,7 +72,7 @@ class Factory implements \Kfn\Menu\Contracts\GroupedMenu
      * @throws \Throwable
      */
     public function get(
-        string|null $groupName = null,
+        ?string $groupName = null,
         bool $resolvedOnly = true,
     ): GroupedMenu|GroupItem {
         try {
