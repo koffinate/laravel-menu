@@ -29,7 +29,7 @@ class GroupItem implements \Kfn\Menu\Contracts\GroupItem
     private static string $collectionName;
 
     /** @var \Illuminate\Support\Fluent|null */
-    private static Fluent|null $factory = null;
+    private static ?Fluent $factory = null;
 
     /** @var string */
     public string $name;
@@ -92,7 +92,7 @@ class GroupItem implements \Kfn\Menu\Contracts\GroupItem
         array $attribute = [],
         int $sort = 0,
         string|array|null $activeRoute = null,
-        array|null $activeRouteParam = null,
+        ?array $activeRouteParam = null,
         Closure|bool $resolver = true
     ): static {
         return $this->add(
@@ -127,7 +127,7 @@ class GroupItem implements \Kfn\Menu\Contracts\GroupItem
         array $attribute = [],
         int $sort = 0,
         string|array|null $activeUrl = null,
-        array|null $activeUrlParam = null,
+        ?array $activeUrlParam = null,
         Closure|bool $resolver = true
     ): static {
         return $this->add(
@@ -164,7 +164,7 @@ class GroupItem implements \Kfn\Menu\Contracts\GroupItem
         array $attribute = [],
         int $sort = 0,
         string|array|null $activeName = null,
-        array|null $activeParam = null,
+        ?array $activeParam = null,
         Closure|bool $resolver = true
     ): static {
         $factory = static::getItems();

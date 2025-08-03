@@ -29,7 +29,7 @@ class MenuItem implements \Kfn\Menu\Contracts\MenuItem
     public string $href = '#';
 
     /** @var \Kfn\Menu\MenuCollection|null */
-    public MenuCollection|null $items = null;
+    public ?MenuCollection $items = null;
 
     /**
      * @param  \Kfn\Menu\Enum\MenuType  $type
@@ -50,7 +50,7 @@ class MenuItem implements \Kfn\Menu\Contracts\MenuItem
         array|object $attribute = [],
         readonly public int $sort = 0,
         readonly public string|array|null $activeName = null,
-        readonly public array|null $activeParam = null,
+        readonly public ?array $activeParam = null,
         readonly public \Closure|bool $resolver = true
     ) {
         if (! $attribute instanceof MenuItemAttribute) {
@@ -128,7 +128,7 @@ class MenuItem implements \Kfn\Menu\Contracts\MenuItem
     {
         $name = collect((array) $name)->flatMap(function ($nm) {
             $nm = preg_replace('/\s+|\h+/', '', $nm);
-            if (!empty($nm)) {
+            if (! empty($nm)) {
                 return MenuType::ROUTE === $this->type ? [$nm, $nm.'.*'] : [$nm, $nm.'/*'];
             }
         });

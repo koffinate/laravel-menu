@@ -25,8 +25,8 @@ interface GroupItem
         array $param = [],
         array $attribute = [],
         int $sort = 0,
-        string|null $activeRoute = null,
-        array|null $activeRouteParam = null,
+        ?string $activeRoute = null,
+        ?array $activeRouteParam = null,
         Closure|bool $resolver = true
     ): static;
 
@@ -48,8 +48,8 @@ interface GroupItem
         array $param = [],
         array $attribute = [],
         int $sort = 0,
-        string|null $activeUrl = null,
-        array|null $activeUrlParam = null,
+        ?string $activeUrl = null,
+        ?array $activeUrlParam = null,
         Closure|bool $resolver = true
     ): static;
 
@@ -73,8 +73,8 @@ interface GroupItem
         array $param = [],
         array $attribute = [],
         int $sort = 0,
-        string|null $activeName = null,
-        array|null $activeParam = null,
+        ?string $activeName = null,
+        ?array $activeParam = null,
         Closure|bool $resolver = true
     ): static;
 }

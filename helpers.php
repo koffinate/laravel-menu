@@ -10,7 +10,7 @@ if (! function_exists('menus')) {
      *
      * @return \Kfn\Menu\Contracts\GroupedMenu
      */
-    function menus(string|null $name = null): \Kfn\Menu\Contracts\GroupedMenu
+    function menus(?string $name = null): \Kfn\Menu\Contracts\GroupedMenu
     {
         return new \Kfn\Menu\Factory(name: $name);
     }
@@ -23,7 +23,7 @@ if (! function_exists('menuType')) {
      * @param  string|null  $type
      * @return MenuType|string|null
      */
-    function menuType(string|null $type = null): MenuType|string|null
+    function menuType(?string $type = null): MenuType|string|null
     {
         if ($type) {
             return MenuType::tryFrom($type);

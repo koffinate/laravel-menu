@@ -16,8 +16,8 @@ class FactoryX implements \Kfn\Menu\Contracts\GroupedMenu
 {
     private static string $name;
     private static string $group;
-    private static MenuItemAttribute|null $groupAttribute = null;
-    private static Fluent|null $factory = null;
+    private static ?MenuItemAttribute $groupAttribute = null;
+    private static ?Fluent $factory = null;
     private static string $childName;
 
     /**
@@ -26,8 +26,8 @@ class FactoryX implements \Kfn\Menu\Contracts\GroupedMenu
      * @param  array  $groupAttribute
      */
     public function __construct(
-        string|null $name = null,
-        string|null $group = null,
+        ?string $name = null,
+        ?string $group = null,
         array $groupAttribute = []
     ) {
         static::$name = $name ?? 'main';
@@ -89,8 +89,8 @@ class FactoryX implements \Kfn\Menu\Contracts\GroupedMenu
         string $title,
         array $param = [],
         array $attribute = [],
-        string|null $activeRoute = null,
-        array|null $activeRouteParam = null,
+        ?string $activeRoute = null,
+        ?array $activeRouteParam = null,
         Closure|bool $resolver = true,
         bool $hasChild = false
     ): static {
@@ -123,8 +123,8 @@ class FactoryX implements \Kfn\Menu\Contracts\GroupedMenu
         string $title,
         array $param = [],
         array $attribute = [],
-        string|null $activeUrl = null,
-        array|null $activeUrlParam = null,
+        ?string $activeUrl = null,
+        ?array $activeUrlParam = null,
         Closure|bool $resolver = true,
         bool $hasChild = false
     ): static {
@@ -159,8 +159,8 @@ class FactoryX implements \Kfn\Menu\Contracts\GroupedMenu
         string $title,
         array $param = [],
         array $attribute = [],
-        string|null $activeName = null,
-        array|null $activeParam = null,
+        ?string $activeName = null,
+        ?array $activeParam = null,
         Closure|bool $resolver = true,
         bool $hasChild = false
     ): static {
