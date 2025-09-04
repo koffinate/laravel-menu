@@ -1,29 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Kfn\Menu;
 
 use Closure;
 use Exception;
 use Illuminate\Support\Fluent;
 use Kfn\Menu\Enum\MenuType;
+use Throwable;
 
 /**
- * @implements \Kfn\Menu\Contracts\GroupItem
- *
- * @property  \Kfn\Menu\Enum\MenuType  $type
- * @property  string  $title
- * @property  string $name
- * @property  array  $param
- * @property  string $href
- * @property  \Kfn\Menu\MenuItemAttribute  $attribute
- * @property  string|null  $activeName
- * @property  array|null  $activeParam
- * @property  string  $group
- * @property  \Kfn\Menu\MenuItemAttribute  $groupAttribute
- * @property  \Closure|bool  $resolver
- * @property  bool  $hasChild
+ * @implements \Kfn\Menu\Contracts\GroupedMenu
  */
-class GroupItem implements \Kfn\Menu\Contracts\GroupItem
+class SubMenu implements \Kfn\Menu\Contracts\SubMenu
 {
     /** @var string */
     private static string $collectionName;
@@ -31,11 +21,8 @@ class GroupItem implements \Kfn\Menu\Contracts\GroupItem
     /** @var \Illuminate\Support\Fluent|null */
     private static ?Fluent $factory = null;
 
-    /** @var \Kfn\Menu\MenuItemAttribute */
-    public MenuItemAttribute $attribute;
-
     /** @var \Kfn\Menu\MenuCollection<\Kfn\Menu\MenuItem> */
-    public MenuCollection $items;
+    private MenuCollection $items;
 
     /**
      * @param  string  $name
@@ -44,21 +31,29 @@ class GroupItem implements \Kfn\Menu\Contracts\GroupItem
      * @param  int  $sort
      */
     public function __construct(
-        public string $name = 'default',
-        public string $title = 'Default',
-        array|object $attribute = [],
-        public int $sort = 0
+        public string|null $name = null
     ) {
-        if (! $attribute instanceof MenuItemAttribute) {
-            $attribute = new MenuItemAttribute($attribute);
-        }
         if (! static::$factory instanceof Fluent) {
             static::$factory = new Fluent();
         }
-        static::$collectionName = $name;
-
-        $this->attribute = $attribute;
+        static::$collectionName = $name ?? uniqid('sub-menu-');
         $this->items = static::getItems();
+    }
+
+    /**
+     * @return MenuCollection
+     */
+    public function all(): MenuCollection
+    {
+        return $this->get();
+    }
+
+    /**
+     * @return MenuCollection
+     */
+    public function get(): MenuCollection
+    {
+        return $this->items;
     }
 
     /**

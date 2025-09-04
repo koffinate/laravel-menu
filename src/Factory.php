@@ -72,7 +72,7 @@ class Factory implements \Kfn\Menu\Contracts\GroupedMenu
      * @throws \Throwable
      */
     public function get(
-        ?string $groupName = null,
+        string|null $groupName = null,
         bool $resolvedOnly = true,
     ): GroupedMenu|GroupItem {
         try {
@@ -95,8 +95,7 @@ class Factory implements \Kfn\Menu\Contracts\GroupedMenu
             if ($groupedMenu instanceof GroupedMenu && $resolvedOnly && $groupedMenu->isNotEmpty()) {
                 $groupedMenu = $groupedMenu->each(function (GroupItem $group) {
                     if ($group->items->isNotEmpty()) {
-                        $groupItems = $group->items->filter(fn (MenuItem $it) => $it->resolve());
-                        $group->items = $groupItems;
+                        $group->items = $group->items->filter(fn (MenuItem $it) => $it->resolve());
                     }
 
                     return $group;

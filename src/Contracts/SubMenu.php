@@ -6,7 +6,7 @@ use Closure;
 use Kfn\Menu\Enum\MenuType;
 use Kfn\Menu\MenuCollection;
 
-interface GroupItem
+interface SubMenu
 {
     /**
      * @param  string  $name

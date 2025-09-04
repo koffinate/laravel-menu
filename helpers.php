@@ -10,9 +10,23 @@ if (! function_exists('menus')) {
      *
      * @return \Kfn\Menu\Contracts\GroupedMenu
      */
-    function menus(?string $name = null): \Kfn\Menu\Contracts\GroupedMenu
+    function menus(string|null $name = null): \Kfn\Menu\Contracts\GroupedMenu
     {
         return new \Kfn\Menu\Factory(name: $name);
+    }
+}
+
+if (! function_exists('subMenus')) {
+    /**
+     *  Menu instance.
+     *
+     * @param  string|null  $name
+     *
+     * @return \Kfn\Menu\Contracts\SubMenu
+     */
+    function subMenus(string|null $name = null): \Kfn\Menu\Contracts\SubMenu
+    {
+        return new \Kfn\Menu\SubMenu(name: $name);
     }
 }
 

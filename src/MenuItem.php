@@ -28,11 +28,8 @@ class MenuItem implements \Kfn\Menu\Contracts\MenuItem
     /** @var string */
     public string $href = '#';
 
-    /** @var \Kfn\Menu\MenuCollection|null */
-    public ?MenuCollection $items = null;
-
     /**
-     * @param  \Kfn\Menu\Enum\MenuType  $type
+     * @param  MenuType  $type
      * @param  string  $title
      * @param  string  $name
      * @param  array  $param
@@ -40,6 +37,7 @@ class MenuItem implements \Kfn\Menu\Contracts\MenuItem
      * @param  int  $sort
      * @param  string|array|null  $activeName
      * @param  array|null  $activeParam
+     * @param  MenuCollection|null  $items
      * @param  \Closure|bool  $resolver
      */
     public function __construct(
@@ -50,15 +48,15 @@ class MenuItem implements \Kfn\Menu\Contracts\MenuItem
         array|object $attribute = [],
         readonly public int $sort = 0,
         readonly public string|array|null $activeName = null,
-        readonly public ?array $activeParam = null,
+        readonly public array|null $activeParam = null,
+        public MenuCollection|null $items = null,
         readonly public \Closure|bool $resolver = true
     ) {
         if (! $attribute instanceof MenuItemAttribute) {
             $attribute = new MenuItemAttribute($attribute);
         }
-
         $this->attribute = $attribute;
-        $this->items = new MenuCollection();
+        $this->items ??= new MenuCollection();
     }
 
     /**
@@ -75,6 +73,11 @@ class MenuItem implements \Kfn\Menu\Contracts\MenuItem
     public function resolve(): bool
     {
         $this->resolveHref();
+
+        // resolve items
+        if ($this->items->isNotEmpty()) {
+            $this->items = $this->items->filter(fn (MenuItem $it) => $it->resolve());
+        }
 
         if ($this->resolver instanceof \Closure) {
             return (bool) $this->resolver->call($this);
