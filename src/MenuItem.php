@@ -25,6 +25,8 @@ class MenuItem implements \Kfn\Menu\Contracts\MenuItem
     /** @var \Kfn\Menu\MenuItemAttribute */
     public MenuItemAttribute $attribute;
 
+    final public bool $hasChild = false;
+
     /** @var string */
     public string $href = '#';
 
@@ -57,6 +59,7 @@ class MenuItem implements \Kfn\Menu\Contracts\MenuItem
         }
         $this->attribute = $attribute;
         $this->items ??= new MenuCollection();
+        $this->hasChild = $this->items->isNotEmpty();
     }
 
     /**
