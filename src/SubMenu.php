@@ -5,10 +5,8 @@ declare(strict_types=1);
 namespace Kfn\Menu;
 
 use Closure;
-use Exception;
 use Illuminate\Support\Fluent;
 use Kfn\Menu\Enum\MenuType;
-use Throwable;
 
 /**
  * @implements \Kfn\Menu\Contracts\GroupedMenu
