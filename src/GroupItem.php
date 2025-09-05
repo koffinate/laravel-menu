@@ -3,7 +3,6 @@
 namespace Kfn\Menu;
 
 use Closure;
-use Exception;
 use Illuminate\Support\Fluent;
 use Kfn\Menu\Enum\MenuType;
 
