@@ -1,8 +1,10 @@
 version: 8.2
 preset: laravel
+
 disabled:
   - laravel_phpdoc_alignment
   - laravel_phpdoc_separation
   - nullable_type_declarations
+
 enabled:
   - no_nullable_type_declarations
