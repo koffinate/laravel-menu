@@ -4,7 +4,4 @@ preset: laravel
 disabled:
   - laravel_phpdoc_alignment
   - laravel_phpdoc_separation
-  - nullable_type_declarations
-
-enabled:
-  - no_nullable_type_declarations
+  - normalize_nullable_type_declaration
