@@ -8,22 +8,19 @@ use Illuminate\Support\Fluent;
 
 class GroupedMenu extends Collection
 {
-    /** @var string */
-    private static string $collectionName;
-
     /**
-     * @param $items
+     * @param  $items
      */
     public function __construct($items = [])
     {
-        parent::__construct([]);
+        parent::__construct($items);
     }
 
     /**
-     * @param $item
+     * @param  $item
      *
      * @return $this
-     * @throws \Exception
+     * @throws Exception
      */
     public function add($item): static
     {
@@ -33,10 +30,10 @@ class GroupedMenu extends Collection
     }
 
     /**
-     * @param ...$values
+     * @param  ...$values
      *
      * @return $this
-     * @throws \Exception
+     * @throws Exception
      */
     public function push(...$values): static
     {
@@ -48,11 +45,11 @@ class GroupedMenu extends Collection
     }
 
     /**
-     * @param $key
-     * @param $value
+     * @param  $key
+     * @param  $value
      *
      * @return void
-     * @throws \Exception
+     * @throws Exception
      */
     public function offsetSet($key, $value): void
     {
@@ -69,8 +66,8 @@ class GroupedMenu extends Collection
     /**
      * @param  mixed  $item
      *
-     * @return \Illuminate\Support\Fluent
-     * @throws \Exception
+     * @return Fluent
+     * @throws Exception
      */
     private function _setItem(mixed $item): Fluent
     {
@@ -83,7 +80,8 @@ class GroupedMenu extends Collection
             $title = $item;
             $attributes = [];
             $sort = 0;
-        } else {
+        }
+        else {
             if (is_array($item) || is_object($item)) {
                 $item = new Fluent($item);
             }

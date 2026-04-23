@@ -5,7 +5,7 @@ namespace Kfn\Menu;
 use Illuminate\Support\Fluent;
 
 /**
- * @extends \Illuminate\Support\Fluent
+ * @extends Fluent
  *
  * @property string $icon
  * @property string $class
@@ -14,12 +14,15 @@ use Illuminate\Support\Fluent;
  */
 class MenuItemAttribute extends Fluent
 {
+    private string $menuTheme = 'default';
+
     /**
      * @param  array|object  $attributes
      */
     public function __construct(array|object $attributes)
     {
         parent::__construct($attributes);
+        $this->menuTheme = config('menus.theme', 'default');
         $this->setAttribute();
     }
 
@@ -32,11 +35,12 @@ class MenuItemAttribute extends Fluent
         $icons = [];
         if ($icon && (is_array($icon) || is_object($icon))) {
             foreach ((array) $icon as $_icon) {
-                $icons[] = config('koffinate.menu-icon.'.$_icon) ?: $_icon;
+                $icons[] = $this->getIcon($_icon);
             }
             $this->offsetSet('icon', implode(' ', $icons));
-        } else {
-            $this->offsetSet('icon', config('koffinate.menu-icon.'.$icon) ?: $icon);
+        }
+        else {
+            $this->offsetSet('icon', $this->getIcon($icon));
         }
 
         $cssClass = $this->get('class');
@@ -57,5 +61,26 @@ class MenuItemAttribute extends Fluent
             $this->offsetSet('tags', $tags);
         }
         unset($icons, $icon, $cssClass, $cssStyle, $tags);
+    }
+
+    private function getIcon(string|null $icon): string|null
+    {
+        $_icon = null;
+
+        if ($icon) {
+            if ($this->menuTheme !== 'default') {
+                $_icon = config("menus.themes.{$this->menuTheme}.icons.{$icon}");
+            }
+
+            if (empty($_icon)) {
+                $_icon = config("menus.icons.{$icon}");
+            }
+
+            if (empty($_icon)) {
+                $_icon = config("koffinate.menu-icon.{$icon}");
+            }
+        }
+
+        return $_icon ?: $icon;
     }
 }

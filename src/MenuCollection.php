@@ -4,6 +4,4 @@ namespace Kfn\Menu;
 
 use Illuminate\Support\Collection;
 
-class MenuCollection extends Collection
-{
-}
+class MenuCollection extends Collection {}

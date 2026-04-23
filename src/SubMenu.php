@@ -6,20 +6,21 @@ namespace Kfn\Menu;
 
 use Closure;
 use Illuminate\Support\Fluent;
+use Kfn\Menu\Contracts\GroupedMenu;
 use Kfn\Menu\Enum\MenuType;
 
 /**
- * @implements \Kfn\Menu\Contracts\GroupedMenu
+ * @implements GroupedMenu
  */
-class SubMenu implements \Kfn\Menu\Contracts\SubMenu
+class SubMenu implements Contracts\SubMenu
 {
     /** @var string */
     private static string $collectionName;
 
-    /** @var \Illuminate\Support\Fluent|null */
-    private static ?Fluent $factory = null;
+    /** @var Fluent|null */
+    private static Fluent|null $factory = null;
 
-    /** @var \Kfn\Menu\MenuCollection<\Kfn\Menu\MenuItem> */
+    /** @var MenuCollection<MenuItem> */
     private MenuCollection $items;
 
     /**
@@ -32,7 +33,7 @@ class SubMenu implements \Kfn\Menu\Contracts\SubMenu
         public string|null $name = null
     ) {
         if (! static::$factory instanceof Fluent) {
-            static::$factory = new Fluent();
+            static::$factory = new Fluent;
         }
         static::$collectionName = $name ?? uniqid('sub-menu-');
         $this->items = static::getItems();
@@ -60,10 +61,10 @@ class SubMenu implements \Kfn\Menu\Contracts\SubMenu
      * @param  array  $param
      * @param  array  $attribute
      * @param  int  $sort
-     * @param  string|array|null  $activeRoute
+     * @param  array|string|null  $activeRoute
      * @param  array|null  $activeRouteParam
      * @param  MenuCollection|null  $items
-     * @param  Closure|bool  $resolver
+     * @param  bool|Closure  $resolver
      *
      * @return $this
      */
@@ -73,10 +74,10 @@ class SubMenu implements \Kfn\Menu\Contracts\SubMenu
         array $param = [],
         array $attribute = [],
         int $sort = 0,
-        string|array|null $activeRoute = null,
+        array|string|null $activeRoute = null,
         array|null $activeRouteParam = null,
         MenuCollection|null $items = null,
-        Closure|bool $resolver = true
+        bool|Closure $resolver = true
     ): static {
         return $this->add(
             type: MenuType::ROUTE,
@@ -98,10 +99,10 @@ class SubMenu implements \Kfn\Menu\Contracts\SubMenu
      * @param  array  $param
      * @param  array  $attribute
      * @param  int  $sort
-     * @param  string|array|null  $activeUrl
+     * @param  array|string|null  $activeUrl
      * @param  array|null  $activeUrlParam
      * @param  MenuCollection|null  $items
-     * @param  Closure|bool  $resolver
+     * @param  bool|Closure  $resolver
      *
      * @return $this
      */
@@ -111,10 +112,10 @@ class SubMenu implements \Kfn\Menu\Contracts\SubMenu
         array $param = [],
         array $attribute = [],
         int $sort = 0,
-        string|array|null $activeUrl = null,
+        array|string|null $activeUrl = null,
         array|null $activeUrlParam = null,
         MenuCollection|null $items = null,
-        Closure|bool $resolver = true
+        bool|Closure $resolver = true
     ): static {
         return $this->add(
             type: MenuType::URL,
@@ -137,10 +138,10 @@ class SubMenu implements \Kfn\Menu\Contracts\SubMenu
      * @param  array  $param
      * @param  array  $attribute
      * @param  int  $sort
-     * @param  string|array|null  $activeName
+     * @param  array|string|null  $activeName
      * @param  array|null  $activeParam
      * @param  MenuCollection|null  $items
-     * @param  Closure|bool  $resolver
+     * @param  bool|Closure  $resolver
      *
      * @return $this
      */
@@ -151,10 +152,10 @@ class SubMenu implements \Kfn\Menu\Contracts\SubMenu
         array $param = [],
         array $attribute = [],
         int $sort = 0,
-        string|array|null $activeName = null,
+        array|string|null $activeName = null,
         array|null $activeParam = null,
         MenuCollection|null $items = null,
-        Closure|bool $resolver = true
+        bool|Closure $resolver = true
     ): static {
         $factory = static::getItems();
         $factory->add(
@@ -176,12 +177,12 @@ class SubMenu implements \Kfn\Menu\Contracts\SubMenu
     }
 
     /**
-     * @return \Kfn\Menu\MenuCollection
+     * @return MenuCollection
      */
     private static function getItems(): MenuCollection
     {
         if (! static::$factory[static::$collectionName] instanceof MenuCollection) {
-            static::$factory[static::$collectionName] = new MenuCollection();
+            static::$factory[static::$collectionName] = new MenuCollection;
         }
 
         return static::$factory[static::$collectionName];

@@ -7,17 +7,18 @@ namespace Kfn\Menu;
 use Closure;
 use Exception;
 use Illuminate\Support\Fluent;
+use Kfn\Menu\Contracts\GroupedMenu;
 use Kfn\Menu\Enum\MenuType;
 
 /**
- * @implements \Kfn\Menu\Contracts\GroupedMenu
+ * @implements GroupedMenu
  */
-class FactoryX implements \Kfn\Menu\Contracts\GroupedMenu
+class FactoryX implements GroupedMenu
 {
     private static string $name;
     private static string $group;
-    private static ?MenuItemAttribute $groupAttribute = null;
-    private static ?Fluent $factory = null;
+    private static MenuItemAttribute|null $groupAttribute = null;
+    private static Fluent|null $factory = null;
     private static string $childName;
 
     /**
@@ -26,15 +27,15 @@ class FactoryX implements \Kfn\Menu\Contracts\GroupedMenu
      * @param  array  $groupAttribute
      */
     public function __construct(
-        ?string $name = null,
-        ?string $group = null,
+        string|null $name = null,
+        string|null $group = null,
         array $groupAttribute = []
     ) {
         static::$name = $name ?? 'main';
         static::$group = $group ?? 'Default';
         static::$groupAttribute = new MenuItemAttribute($groupAttribute);
         if (! static::$factory instanceof Fluent) {
-            static::$factory = new Fluent();
+            static::$factory = new Fluent;
         }
     }
 
@@ -42,7 +43,7 @@ class FactoryX implements \Kfn\Menu\Contracts\GroupedMenu
      * @param  bool  $grouped
      * @param  bool  $resolvedOnly
      *
-     * @return \Kfn\Menu\MenuCollection
+     * @return MenuCollection
      * @throws \Throwable
      */
     public function get(bool $grouped = true, bool $resolvedOnly = true): MenuCollection
@@ -61,7 +62,8 @@ class FactoryX implements \Kfn\Menu\Contracts\GroupedMenu
 
                 return $menus;
             }
-        } catch (Exception $e) {
+        }
+        catch (Exception $e) {
             throw_if(app()->hasDebugModeEnabled(), $e);
             app('log')->error('failed on get menu factory\n', [
                 'message' => $e->getMessage(),
@@ -69,7 +71,7 @@ class FactoryX implements \Kfn\Menu\Contracts\GroupedMenu
             ]);
         }
 
-        return new MenuCollection();
+        return new MenuCollection;
     }
 
     /**
@@ -79,7 +81,7 @@ class FactoryX implements \Kfn\Menu\Contracts\GroupedMenu
      * @param  array  $attribute
      * @param  string|null  $activeRoute
      * @param  array|null  $activeRouteParam
-     * @param  \Closure|bool  $resolver
+     * @param  bool|Closure  $resolver
      * @param  bool  $hasChild
      *
      * @return static
@@ -89,9 +91,9 @@ class FactoryX implements \Kfn\Menu\Contracts\GroupedMenu
         string $title,
         array $param = [],
         array $attribute = [],
-        ?string $activeRoute = null,
-        ?array $activeRouteParam = null,
-        Closure|bool $resolver = true,
+        string|null $activeRoute = null,
+        array|null $activeRouteParam = null,
+        bool|Closure $resolver = true,
         bool $hasChild = false
     ): static {
         return $this->add(
@@ -113,7 +115,7 @@ class FactoryX implements \Kfn\Menu\Contracts\GroupedMenu
      * @param  array  $attribute
      * @param  string|null  $activeUrl
      * @param  array|null  $activeUrlParam
-     * @param  \Closure|bool  $resolver
+     * @param  bool|Closure  $resolver
      * @param  bool  $hasChild
      *
      * @return $this
@@ -123,9 +125,9 @@ class FactoryX implements \Kfn\Menu\Contracts\GroupedMenu
         string $title,
         array $param = [],
         array $attribute = [],
-        ?string $activeUrl = null,
-        ?array $activeUrlParam = null,
-        Closure|bool $resolver = true,
+        string|null $activeUrl = null,
+        array|null $activeUrlParam = null,
+        bool|Closure $resolver = true,
         bool $hasChild = false
     ): static {
         return $this->add(
@@ -141,14 +143,14 @@ class FactoryX implements \Kfn\Menu\Contracts\GroupedMenu
     }
 
     /**
-     * @param  \Kfn\Menu\Enum\MenuType  $type
+     * @param  MenuType  $type
      * @param  string  $name
      * @param  string  $title
      * @param  array  $param
      * @param  array  $attribute
      * @param  string|null  $activeName
      * @param  array|null  $activeParam
-     * @param  \Closure|bool  $resolver
+     * @param  bool|Closure  $resolver
      * @param  bool  $hasChild
      *
      * @return static
@@ -159,9 +161,9 @@ class FactoryX implements \Kfn\Menu\Contracts\GroupedMenu
         string $title,
         array $param = [],
         array $attribute = [],
-        ?string $activeName = null,
-        ?array $activeParam = null,
-        Closure|bool $resolver = true,
+        string|null $activeName = null,
+        array|null $activeParam = null,
+        bool|Closure $resolver = true,
         bool $hasChild = false
     ): static {
         $factory = static::getFactory();
@@ -185,12 +187,12 @@ class FactoryX implements \Kfn\Menu\Contracts\GroupedMenu
     }
 
     /**
-     * @return \Kfn\Menu\MenuCollection
+     * @return MenuCollection
      */
     private static function getFactory(): MenuCollection
     {
         if (! static::$factory[static::$name] instanceof MenuCollection) {
-            static::$factory[static::$name] = new MenuCollection();
+            static::$factory[static::$name] = new MenuCollection;
         }
 
         return static::$factory[static::$name];

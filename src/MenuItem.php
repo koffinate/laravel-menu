@@ -3,28 +3,30 @@
 namespace Kfn\Menu;
 
 use Exception;
+use Illuminate\Database\Eloquent\Model;
 use Kfn\Menu\Enum\MenuType;
 
 /**
- * @implements \Kfn\Menu\Contracts\MenuItem
+ * @implements Contracts\MenuItem
  *
- * @property  \Kfn\Menu\Enum\MenuType  $type
- * @property  string  $title
- * @property  string $name
- * @property  array  $param
- * @property  int $sort
- * @property  string $href
- * @property  \Kfn\Menu\MenuItemAttribute  $attribute
- * @property  string|null  $activeName
- * @property  array|null  $activeParam
- * @property  \Closure|bool  $resolver
- * @property  bool  $hasChild
+ * @property MenuType $type
+ * @property string $title
+ * @property string $name
+ * @property array $param
+ * @property int $sort
+ * @property string $href
+ * @property MenuItemAttribute $attribute
+ * @property string|null $activeName
+ * @property array|null $activeParam
+ * @property bool|\Closure $resolver
+ * @property bool $hasChild
  */
-class MenuItem implements \Kfn\Menu\Contracts\MenuItem
+class MenuItem implements Contracts\MenuItem
 {
-    /** @var \Kfn\Menu\MenuItemAttribute */
+    /** @var MenuItemAttribute */
     public MenuItemAttribute $attribute;
 
+    /** @var bool */
     final public bool $hasChild = false;
 
     /** @var string */
@@ -37,28 +39,28 @@ class MenuItem implements \Kfn\Menu\Contracts\MenuItem
      * @param  array  $param
      * @param  array|object  $attribute
      * @param  int  $sort
-     * @param  string|array|null  $activeName
+     * @param  array|string|null  $activeName
      * @param  array|null  $activeParam
      * @param  MenuCollection|null  $items
-     * @param  \Closure|bool  $resolver
+     * @param  bool|\Closure  $resolver
      */
     public function __construct(
-        readonly public MenuType $type,
-        readonly public string $title,
-        readonly public string $name,
-        readonly public array $param = [],
+        public readonly MenuType $type,
+        public readonly string $title,
+        public readonly string $name,
+        public readonly array $param = [],
         array|object $attribute = [],
-        readonly public int $sort = 0,
-        readonly public string|array|null $activeName = null,
-        readonly public array|null $activeParam = null,
+        public readonly int $sort = 0,
+        public readonly array|string|null $activeName = null,
+        public readonly array|null $activeParam = null,
         public MenuCollection|null $items = null,
-        readonly public \Closure|bool $resolver = true
+        public readonly bool|\Closure $resolver = true
     ) {
         if (! $attribute instanceof MenuItemAttribute) {
             $attribute = new MenuItemAttribute($attribute);
         }
         $this->attribute = $attribute;
-        $this->items ??= new MenuCollection();
+        $this->items ??= new MenuCollection;
         $this->hasChild = $this->items->isNotEmpty();
     }
 
@@ -119,23 +121,24 @@ class MenuItem implements \Kfn\Menu\Contracts\MenuItem
                 MenuType::URL => url($name, $params),
                 default => '#',
             };
-        } catch (Exception $e) {
+        }
+        catch (Exception $e) {
             $this->href = '#';
         }
     }
 
     /**
-     * @param  string|null  $name
+     * @param  array|string|null  $name
      * @param  array  $params
      *
      * @return bool
      */
-    private function getActiveStatus(string|array|null $name = '', array $params = []): bool
+    private function getActiveStatus(array|string|null $name = '', array $params = []): bool
     {
         $name = collect((array) $name)->flatMap(function ($nm) {
             $nm = preg_replace('/\s+|\h+/', '', $nm);
             if (! empty($nm)) {
-                return MenuType::ROUTE === $this->type ? [$nm, $nm.'.*'] : [$nm, $nm.'/*'];
+                return $this->type === MenuType::ROUTE ? [$nm, $nm.'.*'] : [$nm, $nm.'/*'];
             }
         });
         if ($name->isEmpty()) {
@@ -148,7 +151,8 @@ class MenuItem implements \Kfn\Menu\Contracts\MenuItem
                 MenuType::URL => $this->getActiveByUrl($name->toArray()),
                 default => false,
             };
-        } catch (Exception $e) {
+        }
+        catch (Exception $e) {
             app('log')->error($e->getMessage());
         }
 
@@ -176,8 +180,8 @@ class MenuItem implements \Kfn\Menu\Contracts\MenuItem
                 }
 
                 if (
-                    $requestRoute->parameter($key) instanceof \Illuminate\Database\Eloquent\Model
-                    && $value instanceof \Illuminate\Database\Eloquent\Model
+                    $requestRoute->parameter($key) instanceof Model
+                    && $value instanceof Model
                     && $requestRoute->parameter($key)->id != ($value->id ?? null)
                 ) {
                     return false;
@@ -189,10 +193,12 @@ class MenuItem implements \Kfn\Menu\Contracts\MenuItem
                         if ($requestRoute->parameter($key)->value && $requestRoute->parameter($key)->value != $value) {
                             return false;
                         }
-                    } catch (Exception $e) {
+                    }
+                    catch (Exception $e) {
                         return false;
                     }
-                } else {
+                }
+                else {
                     if ($requestRoute->parameter($key) != $value) {
                         return false;
                     }

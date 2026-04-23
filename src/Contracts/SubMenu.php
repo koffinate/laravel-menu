@@ -17,7 +17,7 @@ interface SubMenu
      * @param  string|null  $activeRoute
      * @param  array|null  $activeRouteParam
      * @param  MenuCollection|null  $items
-     * @param  Closure|bool  $resolver
+     * @param  bool|Closure  $resolver
      *
      * @return $this
      */
@@ -30,7 +30,7 @@ interface SubMenu
         string|null $activeRoute = null,
         array|null $activeRouteParam = null,
         MenuCollection|null $items = null,
-        Closure|bool $resolver = true
+        bool|Closure $resolver = true
     ): static;
 
     /**
@@ -42,7 +42,7 @@ interface SubMenu
      * @param  string|null  $activeUrl
      * @param  array|null  $activeUrlParam
      * @param  MenuCollection|null  $items
-     * @param  Closure|bool  $resolver
+     * @param  bool|Closure  $resolver
      *
      * @return $this
      */
@@ -55,7 +55,7 @@ interface SubMenu
         string|null $activeUrl = null,
         array|null $activeUrlParam = null,
         MenuCollection|null $items = null,
-        Closure|bool $resolver = true
+        bool|Closure $resolver = true
     ): static;
 
     /**
@@ -68,7 +68,7 @@ interface SubMenu
      * @param  string|null  $activeName
      * @param  array|null  $activeParam
      * @param  MenuCollection|null  $items
-     * @param  Closure|bool  $resolver
+     * @param  bool|Closure  $resolver
      *
      * @return $this
      */
@@ -82,6 +82,6 @@ interface SubMenu
         string|null $activeName = null,
         array|null $activeParam = null,
         MenuCollection|null $items = null,
-        Closure|bool $resolver = true
+        bool|Closure $resolver = true
     ): static;
 }

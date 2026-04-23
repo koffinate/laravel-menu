@@ -9,7 +9,7 @@ use Kfn\Menu\Enum\MenuType;
 interface Menu
 {
     /**
-     * @return \Illuminate\Support\Collection
+     * @return Collection
      */
     public function get(): Collection;
 
@@ -20,7 +20,7 @@ interface Menu
      * @param  array  $attribute
      * @param  string|null  $activeRoute
      * @param  array|null  $activeRouteParam
-     * @param  \Closure|bool  $resolver
+     * @param  bool|Closure  $resolver
      * @param  bool  $hasChild
      *
      * @return static
@@ -30,9 +30,9 @@ interface Menu
         string $title,
         array $param = [],
         array $attribute = [],
-        ?string $activeRoute = null,
-        ?array $activeRouteParam = null,
-        Closure|bool $resolver = true,
+        string|null $activeRoute = null,
+        array|null $activeRouteParam = null,
+        bool|Closure $resolver = true,
         bool $hasChild = false
     ): static;
 
@@ -43,7 +43,7 @@ interface Menu
      * @param  array  $attribute
      * @param  string|null  $activeUrl
      * @param  array|null  $activeUrlParam
-     * @param  \Closure|bool  $resolver
+     * @param  bool|Closure  $resolver
      * @param  bool  $hasChild
      *
      * @return static
@@ -53,21 +53,21 @@ interface Menu
         string $title,
         array $param = [],
         array $attribute = [],
-        ?string $activeUrl = null,
-        ?array $activeUrlParam = null,
-        Closure|bool $resolver = true,
+        string|null $activeUrl = null,
+        array|null $activeUrlParam = null,
+        bool|Closure $resolver = true,
         bool $hasChild = false
     ): static;
 
     /**
-     * @param  \Kfn\Menu\Enum\MenuType  $type
+     * @param  MenuType  $type
      * @param  string  $name
      * @param  string  $title
      * @param  array  $param
      * @param  array  $attribute
      * @param  string|null  $activeName
      * @param  array|null  $activeParam
-     * @param  \Closure|bool  $resolver
+     * @param  bool|Closure  $resolver
      * @param  bool  $hasChild
      *
      * @return static
@@ -78,9 +78,9 @@ interface Menu
         string $title,
         array $param = [],
         array $attribute = [],
-        ?string $activeName = null,
-        ?array $activeParam = null,
-        Closure|bool $resolver = true,
+        string|null $activeName = null,
+        array|null $activeParam = null,
+        bool|Closure $resolver = true,
         bool $hasChild = false
     ): static;
 }

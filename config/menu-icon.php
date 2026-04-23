@@ -1,6 +1,6 @@
 <?php
 
 return [
-    'user' => 'fa-user',
-    'home' => 'fa-home',
+    // 'user' => 'fa-user',
+    // 'home' => 'fa-home',
 ];

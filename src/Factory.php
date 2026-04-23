@@ -9,26 +9,65 @@ use Illuminate\Support\Fluent;
 use Throwable;
 
 /**
- * @implements \Kfn\Menu\Contracts\GroupedMenu
+ * @implements Contracts\GroupedMenu
  */
-class Factory implements \Kfn\Menu\Contracts\GroupedMenu
+class Factory implements Contracts\GroupedMenu
 {
     /** @var string */
-    private static string $name;
+    private string $name;
 
-    /** @var \Illuminate\Support\Fluent|null */
-    private static ?Fluent $factory = null;
+    /** @var Fluent|null */
+    private static Fluent|null $factory = null;
 
     /**
      * @param  string|null  $name
      */
     public function __construct(
-        ?string $name = null,
+        string|null $name = null,
     ) {
-        static::$name = $name ?: 'main';
+        $this->use($name ?: 'main');
         if (! static::$factory instanceof Fluent) {
-            static::$factory = new Fluent();
+            static::$factory = new Fluent;
         }
+    }
+
+    /**
+     * Initialize Factory.
+     *
+     * @return void
+     */
+    // public function __invoke(): void
+    // {
+    //     if (! static::$factory instanceof Fluent) {
+    //         static::$factory = new Fluent;
+    //     }
+    // }
+
+    /**
+     * @param  string  $name
+     *
+     * @return $this
+     */
+    public function use(string $name): static
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * @return GroupedMenu
+     */
+    private function currentGroup(): GroupedMenu
+    {
+        if (
+            ! static::$factory->has($this->name) ||
+            ! static::$factory->get($this->name) instanceof GroupedMenu
+        ) {
+            static::$factory->offsetSet($this->name, new GroupedMenu);
+        }
+
+        return static::$factory->{$this->name};
     }
 
     /**
@@ -40,18 +79,16 @@ class Factory implements \Kfn\Menu\Contracts\GroupedMenu
      * @param  int  $sort
      *
      * @return static
+     * @throws Exception
      */
     public function add(
         string $name,
         string $title,
-        object|array $attributes = [],
+        array|object $attributes = [],
         int $sort = 0,
     ): static {
-        if (! static::$factory[static::$name] instanceof GroupedMenu) {
-            static::$factory[static::$name] = new GroupedMenu();
-        }
-        if (! static::$factory[static::$name]->has($name)) {
-            static::$factory[static::$name]->add([
+        if (! $this->currentGroup()->has($name)) {
+            $this->currentGroup()->add([
                 'name' => $name,
                 'title' => $title,
                 'attributes' => $attributes,
@@ -68,17 +105,17 @@ class Factory implements \Kfn\Menu\Contracts\GroupedMenu
      * @param  string|null  $groupName
      * @param  bool  $resolvedOnly
      *
-     * @return \Kfn\Menu\GroupedMenu|\Kfn\Menu\GroupItem
-     * @throws \Throwable
+     * @return GroupedMenu|GroupItem
+     * @throws Throwable
      */
     public function get(
         string|null $groupName = null,
         bool $resolvedOnly = true,
     ): GroupedMenu|GroupItem {
         try {
-            $groupedMenu = static::$factory->get(static::$name);
+            $groupedMenu = static::$factory->get($this->name);
             if (! $groupedMenu instanceof GroupedMenu) {
-                $groupedMenu = new GroupedMenu();
+                $groupedMenu = new GroupedMenu;
             }
 
             if (! $groupedMenu instanceof GroupedMenu) {
@@ -88,7 +125,7 @@ class Factory implements \Kfn\Menu\Contracts\GroupedMenu
             if ($groupName) {
                 $groupedMenu = $groupedMenu->get($groupName);
                 if (! $groupedMenu instanceof GroupItem) {
-                    $groupedMenu = new GroupItem();
+                    $groupedMenu = new GroupItem;
                 }
             }
 
@@ -103,7 +140,8 @@ class Factory implements \Kfn\Menu\Contracts\GroupedMenu
             }
 
             return $groupedMenu;
-        } catch (Throwable $e) {
+        }
+        catch (Throwable $e) {
             throw_if(app()->hasDebugModeEnabled(), $e);
             app('log')->error('failed on get menu factory\n', [
                 'message' => $e->getMessage(),
@@ -111,6 +149,6 @@ class Factory implements \Kfn\Menu\Contracts\GroupedMenu
             ]);
         }
 
-        return new GroupedMenu();
+        return new GroupedMenu;
     }
 }

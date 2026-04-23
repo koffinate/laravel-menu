@@ -2,6 +2,8 @@
 
 namespace Kfn\Menu\Contracts;
 
+use Kfn\Menu\GroupItem;
+
 interface GroupedMenu
 {
     /**
@@ -27,10 +29,10 @@ interface GroupedMenu
      * @param  string|null  $groupName
      * @param  bool  $resolvedOnly
      *
-     * @return \Kfn\Menu\GroupedMenu|\Kfn\Menu\GroupItem
+     * @return GroupItem|\Kfn\Menu\GroupedMenu
      */
     public function get(
-        ?string $groupName = null,
+        string|null $groupName = null,
         bool $resolvedOnly = true
-    ): \Kfn\Menu\GroupedMenu|\Kfn\Menu\GroupItem;
+    ): GroupItem|\Kfn\Menu\GroupedMenu;
 }

@@ -7,33 +7,33 @@ use Illuminate\Support\Fluent;
 use Kfn\Menu\Enum\MenuType;
 
 /**
- * @implements \Kfn\Menu\Contracts\GroupItem
+ * @implements Contracts\GroupItem
  *
- * @property  \Kfn\Menu\Enum\MenuType  $type
- * @property  string  $title
- * @property  string $name
- * @property  array  $param
- * @property  string $href
- * @property  \Kfn\Menu\MenuItemAttribute  $attribute
- * @property  string|null  $activeName
- * @property  array|null  $activeParam
- * @property  string  $group
- * @property  \Kfn\Menu\MenuItemAttribute  $groupAttribute
- * @property  \Closure|bool  $resolver
- * @property  bool  $hasChild
+ * @property MenuType $type
+ * @property string $title
+ * @property string $name
+ * @property array $param
+ * @property string $href
+ * @property MenuItemAttribute $attribute
+ * @property string|null $activeName
+ * @property array|null $activeParam
+ * @property string $group
+ * @property MenuItemAttribute $groupAttribute
+ * @property bool|Closure $resolver
+ * @property bool $hasChild
  */
-class GroupItem implements \Kfn\Menu\Contracts\GroupItem
+class GroupItem implements Contracts\GroupItem
 {
     /** @var string */
-    private static string $collectionName;
+    private string $collectionName;
 
-    /** @var \Illuminate\Support\Fluent|null */
-    private static ?Fluent $factory = null;
+    /** @var Fluent|null */
+    private Fluent|null $factory = null;
 
-    /** @var \Kfn\Menu\MenuItemAttribute */
+    /** @var MenuItemAttribute */
     public MenuItemAttribute $attribute;
 
-    /** @var \Kfn\Menu\MenuCollection<\Kfn\Menu\MenuItem> */
+    /** @var MenuCollection<MenuItem> */
     public MenuCollection $items;
 
     /**
@@ -51,13 +51,13 @@ class GroupItem implements \Kfn\Menu\Contracts\GroupItem
         if (! $attribute instanceof MenuItemAttribute) {
             $attribute = new MenuItemAttribute($attribute);
         }
-        if (! static::$factory instanceof Fluent) {
-            static::$factory = new Fluent();
+        if (! $this->factory instanceof Fluent) {
+            $this->factory = new Fluent;
         }
-        static::$collectionName = $name;
+        $this->collectionName = $name;
 
         $this->attribute = $attribute;
-        $this->items = static::getItems();
+        $this->items = $this->getItems();
     }
 
     /**
@@ -66,10 +66,10 @@ class GroupItem implements \Kfn\Menu\Contracts\GroupItem
      * @param  array  $param
      * @param  array  $attribute
      * @param  int  $sort
-     * @param  string|array|null  $activeRoute
+     * @param  array|string|null  $activeRoute
      * @param  array|null  $activeRouteParam
      * @param  MenuCollection|null  $items
-     * @param  Closure|bool  $resolver
+     * @param  bool|Closure  $resolver
      *
      * @return $this
      */
@@ -79,10 +79,10 @@ class GroupItem implements \Kfn\Menu\Contracts\GroupItem
         array $param = [],
         array $attribute = [],
         int $sort = 0,
-        string|array|null $activeRoute = null,
+        array|string|null $activeRoute = null,
         array|null $activeRouteParam = null,
         MenuCollection|null $items = null,
-        Closure|bool $resolver = true
+        bool|Closure $resolver = true
     ): static {
         return $this->add(
             type: MenuType::ROUTE,
@@ -104,10 +104,10 @@ class GroupItem implements \Kfn\Menu\Contracts\GroupItem
      * @param  array  $param
      * @param  array  $attribute
      * @param  int  $sort
-     * @param  string|array|null  $activeUrl
+     * @param  array|string|null  $activeUrl
      * @param  array|null  $activeUrlParam
      * @param  MenuCollection|null  $items
-     * @param  Closure|bool  $resolver
+     * @param  bool|Closure  $resolver
      *
      * @return $this
      */
@@ -117,10 +117,10 @@ class GroupItem implements \Kfn\Menu\Contracts\GroupItem
         array $param = [],
         array $attribute = [],
         int $sort = 0,
-        string|array|null $activeUrl = null,
+        array|string|null $activeUrl = null,
         array|null $activeUrlParam = null,
         MenuCollection|null $items = null,
-        Closure|bool $resolver = true
+        bool|Closure $resolver = true
     ): static {
         return $this->add(
             type: MenuType::URL,
@@ -143,10 +143,10 @@ class GroupItem implements \Kfn\Menu\Contracts\GroupItem
      * @param  array  $param
      * @param  array  $attribute
      * @param  int  $sort
-     * @param  string|array|null  $activeName
+     * @param  array|string|null  $activeName
      * @param  array|null  $activeParam
      * @param  MenuCollection|null  $items
-     * @param  Closure|bool  $resolver
+     * @param  bool|Closure  $resolver
      *
      * @return $this
      */
@@ -157,39 +157,44 @@ class GroupItem implements \Kfn\Menu\Contracts\GroupItem
         array $param = [],
         array $attribute = [],
         int $sort = 0,
-        string|array|null $activeName = null,
+        array|string|null $activeName = null,
         array|null $activeParam = null,
         MenuCollection|null $items = null,
-        Closure|bool $resolver = true
+        bool|Closure $resolver = true
     ): static {
-        $factory = static::getItems();
-        $factory->add(
-            new MenuItem(
-                type: $type,
-                title: $title,
-                name: $name,
-                param: $param,
-                attribute: $attribute,
-                sort: $sort,
-                activeName: $activeName,
-                activeParam: $activeParam,
-                items: $items,
-                resolver: $resolver,
-            )
-        );
+        $factory = $this->getItems();
+        $itemName = str($type->value.'_'.$name)->snake()->slug('_')->toString();
+
+        if (! $factory->has($itemName)) {
+            $factory->put(
+                $itemName,
+                new MenuItem(
+                    type: $type,
+                    title: $title,
+                    name: $name,
+                    param: $param,
+                    attribute: $attribute,
+                    sort: $sort,
+                    activeName: $activeName,
+                    activeParam: $activeParam,
+                    items: $items,
+                    resolver: $resolver,
+                )
+            );
+        }
 
         return $this;
     }
 
     /**
-     * @return \Kfn\Menu\MenuCollection
+     * @return MenuCollection
      */
-    private static function getItems(): MenuCollection
+    private function getItems(): MenuCollection
     {
-        if (! static::$factory[static::$collectionName] instanceof MenuCollection) {
-            static::$factory[static::$collectionName] = new MenuCollection();
+        if (! $this->factory[$this->collectionName] instanceof MenuCollection) {
+            $this->factory[$this->collectionName] = new MenuCollection;
         }
 
-        return static::$factory[static::$collectionName];
+        return $this->factory[$this->collectionName];
     }
 }
